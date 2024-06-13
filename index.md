@@ -61,7 +61,49 @@ My starter project is the Arduino Starter. My Arduino Starter utlizies a servo, 
 By linking the buttons to the Arduino UNO signal ports instead of the 5V rail, the buttons can control the LEDs and the servo without being directly linked to it. Thus, all inputs and outputs have their own ports. The main Arduino UNO controls most of the actions via code since the system relies on the ports. For example, the pushbuttons are set to LOW input when pushed, and once detected as LOW, the Arduino UNO sends a HIGH output to the port connected to the red LED.
 
 The code is shown below.
-![image](assets/css/arduinoCode.png)
+```c++
+// C++ code
+int counterClockWiseButton = 2;   //pin of the first button
+int clockWiseButton = 3;  //pin  of the second button
+#define LED_1_PIN 9
+#define LED_2_PIN 10
+#define BUTTON_PIN 4
+#include<Servo.h> //include the servo library
+Servo servo;  //create a servo object
+int pos = 90;  //initial position of the servo
+void  setup() {
+  // put your setup code here, to run once:
+  servo.attach(8);  //pin  used by the servo
+  pinMode(counterClockWiseButton, INPUT_PULLUP);  //define first button as  input pullup
+  pinMode(clockWiseButton, INPUT_PULLUP); //define second button as input pullup
+  pinMode(LED_1_PIN, OUTPUT);
+  pinMode(LED_2_PIN, OUTPUT);
+  /*
+  INPUT_PULLUP send to arduino LOW signal, so, when you press  the button, you send a LOW signal to arduino
+  */
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if ((digitalRead(counterClockWiseButton) ==  LOW)&&(pos < 150)) { //if Value read of the button ==LOW:
+    digitalWrite(LED_1_PIN, HIGH);
+    pos++;  //increases the value  of the "pos" variable each time the push button of the left is pressed
+    delay(10);  //5 milliseconds of delay
+    servo.write(pos); //servo goes to variable pos
+  }else{
+    digitalWrite(LED_1_PIN, LOW);
+  }
+  if ((digitalRead(clockWiseButton) == LOW)&&(pos > 30)) { //if Value read of the button ==LOW:
+    digitalWrite(LED_2_PIN, HIGH);
+    pos--;  //decreases the value of the "pos" variable each time the push button  of the right is pressed
+    delay(10); //5 milliseconds of delay
+    servo.write(pos);  //servo goes to variable pos
+  }
+  else{
+    digitalWrite(LED_2_PIN, LOW);
+  }
+}
+```
 
 After designing and testing the arduino starter on a breadboard, which resulted in a success, I moved the system from a breadboard to an Arduino protoshield, which can be fit ontop of the Arduino UNO. I soldered the components onto the shield, except for the signal cable on the servo as it was not directly linked to the board.
 

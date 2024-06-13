@@ -62,6 +62,7 @@ Since the project is an IoT (Internet of Things) device, it requires an internet
 For my first milestone, I accessed the Adafruit.IO website and created an air quality sensor group. In that group, I created multiple feeds, including aqi (air quality index), category (description of the air quality), humidity, and temperature. These feeds were used to update blocks on the actual app. On the Adafruit.IO dashboard, I added graphs which showed the feeds. The Adafruit dashboard was a way to essentially develop an app.
 
 My dashboard ended up in this layout. I added the map, but during the creation of the project I was not sure I needed it.
+![Image](assets/css/MS1_Dashboard.png)
 
 # Starter Project
 ![Headstone Image](assets/css/arduinoStarter.png)
@@ -117,7 +118,9 @@ void loop() {
 
 After designing and testing the arduino starter on a breadboard, which resulted in a success, I moved the system from a breadboard to an Arduino protoshield, which can be fit ontop of the Arduino UNO. I soldered the components onto the shield, except for the signal cable on the servo as it was not directly linked to the board.
 
-While designing the layout and system was simple, it was difficult to correctly solder on the components, especially the clockwise system. A modification in the future would be using either more soldering wire or a special type of paste to help the wires become more stable.
+While designing the layout and system was simple, it was difficult to correctly solder on the components, especially the clockwise system. As an example, during the setup of my project, there was a poor connection between a resistor and a button. Since the resistor was connected to the main ground rail, the entire program didn't work as intended. At first, I thought the LEDs not working was because of a bad LED connection, but it was linked to the bad resistor-button connection. After fixing the connection between the bad resistor and button using solder paster, the entire system worked again. A modification in the future would be using either more soldering wire or a special type of paste to help the wires become more stable, as well as reinforcing the connections underneath the shield.
+
+
 
 This is a demonstration video of my starter Arduino project.
 

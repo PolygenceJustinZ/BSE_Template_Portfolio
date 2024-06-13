@@ -63,6 +63,9 @@ By linking the buttons to the arduino signal ports instead of the 5V rail, the b
 The code is shown below.
 ![image](assets/css/arduinoCode.png)
 
+Here is a demonstration video of the breadboard working. Later, this video will be replaced with the actual protoshield working.
+![video](assets/css/ArduinoVideo.mp4)
+
 # Schematics 
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
 

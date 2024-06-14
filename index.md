@@ -65,6 +65,8 @@ For my first milestone, I accessed the Adafruit.IO website and created an air qu
 My dashboard ended up in this layout. I added the map, but during the creation of the project I was not sure I needed it.
 ![Image](assets/css/MS1_Dashboard.png)
 
+After doing the setup for the dashboard, I needed to wire together the sensors, as making the connections between the hardware and the software cannot be done without the hardware. I attached cables to my BME280 and PMS5003 Adaptor, which was essential for them to be connected to the Adafruit doubler.
+
 -->
 
 # Starter Project

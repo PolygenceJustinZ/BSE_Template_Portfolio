@@ -67,6 +67,9 @@ My dashboard ended up in this layout. I added the map, but during the creation o
 
 After doing the setup for the dashboard, I needed to wire together the sensors, as making the connections between the hardware and the software cannot be done without the hardware. I attached cables to my BME280 and PMS5003 Adaptor, which was essential for them to be connected to the Adafruit doubler.
 
+Here is the setup for my connections to the Adafruit doubler. These connections are essential for the next steps. For example, the ground ports on both of the components are connected to a single rail on the doubler, meaning that rail will serve as the ground rail.
+![Image](assets/css/MS1_Wiring1.png)
+
 -->
 
 # Starter Project

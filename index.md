@@ -84,6 +84,7 @@ By linking the buttons to the Arduino UNO signal ports instead of the 5V rail, t
 The breadboard layout of my Arduino Starter shows how most of the components are linked to the Arduino UNO signal ports.
 
 ![Headstone Image](assets/css/arduinoStarter.png)
+*This diagram was created by me via Tinkercad*
 
 The code is shown below. Without the code, the Arduino UNO would not know what to do with the cables plugged into its port.
 ```c++

@@ -74,13 +74,18 @@ Here is the setup for my connections to the Adafruit doubler. These connections 
 -->
 
 # Starter Project
-![Headstone Image](assets/css/arduinoStarter.png)
 
+## Summary
 My starter project is the Arduino Starter. My Arduino Starter utlizies a servo, which is controlled to spin clockwise or counter clockwise by two different buttons. When spinning counter clockwise, the red LED lights up, and when spinning clockwise, the green LED lights up. The arduino stops spinning after a certain angle, and is purposely limited between 30 and 150 degrees. However, this portion of code can be easily adjusted if necessary. When the arduino stops spinning, the LEDs are turned off.
 
+## Design
 By linking the buttons to the Arduino UNO signal ports instead of the 5V rail, the buttons can control the LEDs and the servo without being directly linked to it. Thus, all inputs and outputs have their own ports. The main Arduino UNO controls most of the actions via code since the system relies on the ports. For example, the pushbuttons are set to LOW input when pushed, and once detected as LOW, the Arduino UNO sends a HIGH output to the port connected to the red LED.
 
-The code is shown below.
+The breadboard layout of my Arduino Starter shows how most of the components are linked to the Arduino UNO signal ports.
+
+![Headstone Image](assets/css/arduinoStarter.png)
+
+The code is shown below. Without the code, the Arduino UNO would not know what to do with the cables plugged into its port.
 ```c++
 // C++ code
 int counterClockWiseButton = 2;   //pin of the first button
@@ -127,9 +132,12 @@ void loop() {
 
 After designing and testing the arduino starter on a breadboard, which resulted in a success, I moved the system from a breadboard to an Arduino protoshield, which can be fit ontop of the Arduino UNO. I soldered the components onto the shield, except for the signal cable on the servo as it was not directly linked to the board.
 
+## Challenges 
+
 While designing the layout and system was simple, it was difficult to correctly solder on the components, especially the clockwise system. As an example, during the setup of my project, there was a poor connection between a resistor and a button. Since the resistor was connected to the main ground rail, the entire program didn't work as intended. At first, I thought the LEDs not working was because of a bad LED connection, but it was linked to the bad resistor-button connection. After fixing the connection between the bad resistor and button using solder paster, the entire system worked again. A modification in the future would be using either more soldering wire or a special type of paste to help the wires become more stable, as well as reinforcing the connections underneath the shield.
 
 
+## Demonstration
 
 This is a demonstration video of my starter Arduino project.
 

@@ -17,6 +17,7 @@ The image of myself and my completed project will come in the future. Follow the
 -->
 
 ![Headstone Image](assets/css/Justin_Z.JPG)
+
 <!---
 # Final Milestone - Not Started
 

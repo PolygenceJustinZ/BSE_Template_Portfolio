@@ -12,11 +12,11 @@ You should comment out all portions of your portfolio that you have not complete
 |:--:|:--:|:--:|:--:|
 | Justin Z | Evergreen Valley High School | Electrical Engineering | Rising Senior
 
-<!--- 
+<!--
 The image of myself and my completed project will come in the future. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 -->
 
-![Headstone Image](assets/css/Justin_Z.JPG)
+<img src="https://github.com/PolygenceJustinZ/JZ_BSE_Images/blob/main/Justin_Z.JPG" width="450" height="600">
 
 <!---
 # Final Milestone - Not Started

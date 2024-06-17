@@ -16,7 +16,7 @@ You should comment out all portions of your portfolio that you have not complete
 The image of myself and my completed project will come in the future. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 -->
 
-<img src="https://github.com/PolygenceJustinZ/JustinZ_BSE_Portfolio/blob/2cc74e14bf62a937b79aa1bc21d0b8a9718b7de9/assets/css/Justin_Z.JPG" width="450" height="600">
+<img src="assets/css/Justin_Z.JPG" width="450" height="600">
 
 <!---
 # Final Milestone - Not Started

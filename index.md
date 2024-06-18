@@ -39,6 +39,11 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/y3VAmNlER5Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
+For my second milestone, I accessed the Adafruit.IO website and created an air quality sensor group. In that group, I created multiple feeds, including aqi (air quality index), category (description of the air quality), humidity, and temperature. These feeds were used to update blocks on the actual app. On the Adafruit.IO dashboard, I added graphs which showed the feeds. The Adafruit dashboard was a way to essentially develop an app.
+
+My dashboard ended up in this layout. I added the map, but during the creation of the project I was not sure I needed it.
+![Image](assets/css/MS1_Dashboard.png)
+
 For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
 - Technical details of what you've accomplished and how they contribute to the final goal
 - What has been surprising about the project so far
@@ -61,15 +66,10 @@ My main project, an IoT Air Pollution Monitor, gauges the air quality index, hum
 
 Since the project is an IoT (Internet of Things) device, it requires an internet connection, as well as an AC outlet. The air pollution monitor utilizes an open source sensor, as sending data to a company's web service only works until that certain company goes out of business.
 
-For my first milestone, I accessed the Adafruit.IO website and created an air quality sensor group. In that group, I created multiple feeds, including aqi (air quality index), category (description of the air quality), humidity, and temperature. These feeds were used to update blocks on the actual app. On the Adafruit.IO dashboard, I added graphs which showed the feeds. The Adafruit dashboard was a way to essentially develop an app.
-
-My dashboard ended up in this layout. I added the map, but during the creation of the project I was not sure I needed it.
-![Image](assets/css/MS1_Dashboard.png)
-
-After doing the setup for the dashboard, I needed to wire together the sensors, as making the connections between the hardware and the software cannot be done without the hardware. I attached cables to my BME280 and PMS5003 Adaptor, which was essential for them to be connected to the Adafruit doubler.
+For my first milestone, I worked on the physical setup of the project. The BME280 and PMS5003 Adaptor needed to be wired to the Adafruit Doubler. The Adafruit Doubler is the main board for the project, as later I would set up the Adafruit Feather M4 and the Adafruit Airlift Featherwing.
 
 Here is the setup for my connections to the Adafruit doubler. These connections are essential for the next steps. For example, the ground ports on both of the components are connected to a single rail on the doubler, meaning that rail will serve as the ground rail.
-![Image](assets/css/MS1_Wiring1.png)
+![Image](assets/css/IMG_5739.jpg)
 
 -->
 

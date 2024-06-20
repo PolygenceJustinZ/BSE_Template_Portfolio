@@ -49,9 +49,9 @@ For your second milestone, explain what you've worked on since your previous mil
 - What has been surprising about the project so far
 - Previous challenges you faced that you overcame
 - What needs to be completed before your final milestone 
+-->
 
 # First Milestone
--->
 
 ## Main Project Description
 My main project, an IoT Air Pollution Monitor, gauges the air quality index, humidity, and temperature, and is controlled by an external device via CircuitPython. Thus, to effectively complete the project, it is necessary to understand CircuitPython as well as the air quality monitor itself.
@@ -94,6 +94,7 @@ Additionally, the guide isn't very specific and makes a couple of messups throug
 
 ## Video
 
+<iframe width="1280" height="720" src="https://www.youtube.com/embed/B9a5Sim8IEY?list=PLe-u_DjFx7evDJ6N_vX36J16ru7SvHV5m" title="Justin Z. First Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 # Starter Project
 

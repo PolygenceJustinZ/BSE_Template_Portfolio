@@ -35,26 +35,120 @@ For your final milestone, explain the outcome of your project. Key details to in
 - What your biggest challenges and triumphs were at BSE
 - A summary of key topics you learned about
 - What you hope to learn in the future after everything you've learned at BSE
+-->
 
 
+# Second Milestone
 
-# Second Milestone - Not Started
-
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/y3VAmNlER5Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
+## Dashboard
 For my second milestone, I accessed the Adafruit.IO website and created an air quality sensor group. In that group, I created multiple feeds, including aqi (air quality index), category (description of the air quality), humidity, and temperature. These feeds were used to update blocks on the actual app. On the Adafruit.IO dashboard, I added graphs which showed the feeds. The Adafruit dashboard was a way to essentially develop an app.
 
-My dashboard ended up in this layout. I added the map, but during the creation of the project I was not sure I needed it.
-<img src="assets/css/MS1_Doubler1.JPG" width="600" height="450">
+When you create an Adafruit IO account, you are given an Adafruit Username and IO key. Save those somewhere, and don't lose them!
+
+My dashboard ended up in this layout. I added the map, but during the creation of the project it wasn't exactly necessary, but still not a bad feature.
+
+<img src="assets/css/MS1_Dashboard.png" width="700" height="600">
+*With the dashboard completed, all I needed was code that took data from the sensors and uploaded it to the feeds.*
+
+## CircuitPython & Code Setup
+While CircuitPython is a key element for many electronic devices, CircuitPython comes in different forms, and I needed to find the version which was suitable for my Feather M4 Express (the chip that actually handles the program of my device.) After selecting the Feather M4 Express, I downloaded the latest stable uf2 file, which was version 9.0.5.
+
+<img src="assets/css/MS2_CircuitPython.png" width="1350" height="500">
+
+Upon plugging in my device into my computer, I gained access to the CIRCUITPY drive. Inside the lib folder, I installed multiple files from <a href="https://github.com/adafruit/Adafruit_CircuitPython_Bundle"> Adafruit's CircuitPython library bundle</a>. These files are essential imports to the code, and all should be installed for replication purposes. <br />
+<br />
+<img src="assets/css/MS2_lib.png">
+*After installing a github file, I simply copy that file and put it into the lib folder in the CIRCUITPY drive. It is very convenient to open multiple file explorer apps at the same time for an easier file setup.*
+<br />
+<br />
+While other code editors should be suitable, I chose Mu editor as it was a very basic and easy to control. Then, in the CIRCUITPY drive, I created a file named code.py, right next to the lib, sd, and .fseventsd folders, as well as the other files. Next to the code.py file, I made a secrets.py file, where it was used to store my ssid, password, timezone, Adafruit IO username, Adafruit IO password, and the latitude, longitude, and elevation of my city. The proper time zone formats can be found <a href="https://worldtimeapi.org/timezones"> here</a>.
+
+<img src="assets/css/MS2_secrets.png">
+Don't share this file with anybody else!
+
+## Connecting to the IO
+Nothing can be uploaded to Adafruit IO without the internet. Thus, saving the WiFi SSID and passwords of locations the device will be used in is important (that's what part of the secrets.py file is for!)
+
+Here's what my python code looks like. We import secrets from our secrets file and use the wifi.connect() call to try to connect to the wifi. Since connection can falter sometimes, the program retrys upon connection failure.
+
+```python
+import time
+import board
+import busio
+from digitalio import DigitalInOut, Direction, Pull
+from adafruit_esp32spi import adafruit_esp32spi, adafruit_esp32spi_wifimanager
+from adafruit_io.adafruit_io import IO_HTTP
+from simpleio import map_range
+from adafruit_pm25.uart import PM25_UART
+from adafruit_bme280 import basic as adafruit_bme280
+import supervisor
+import gc
+import adafruit_pm25
+import adafruit_bme280
+from adafruit_bme280 import basic as adafruit_bme280
+
+### WiFi ###
+# Get wifi details and more from a secrets.py file
+try:
+    from secrets import secrets
+except ImportError:
+    print("WiFi secrets are kept in secrets.py, please add them there!")
+    raise
+
+# AirLift FeatherWing
+esp32_cs = DigitalInOut(board.D13)
+#esp32_cs = DigitalInOut(board.D9) <-- if you have trouble with the ports, try this code instead.
+esp32_ready = DigitalInOut(board.D11)
+esp32_reset = DigitalInOut(board.D12)
+esp32_gpio0 = DigitalInOut(board.D10)
+spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
+esp = adafruit_esp32spi.ESP_SPIcontrol(
+    spi, esp32_cs, esp32_ready, esp32_reset, esp32_gpio0
+)
+
+wifi = adafruit_esp32spi_wifimanager.ESPSPI_WiFiManager(esp, secrets, status_pixel=None, attempts=4)
+print("Connecting to WiFi...")
+wifi.connect()
+print("Connected to WiFi with IP Address:", wifi.esp.pretty_ip(wifi.esp.ip_address))
+reset_pin = DigitalInOut(board.D9)
+reset_pin.direction = Direction.OUTPUT
+uart = busio.UART(board.TX, board.RX, baudrate=9600)
+pm25 = PM25_UART(uart, reset_pin)
+
+# Create i2c object
+i2c = board.I2C()
+
+# Connect to a BME280 over I2C
+bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=0x77)
+
+# Create an instance of the Adafruit IO HTTP client
+io = IO_HTTP(secrets["aio_username"], secrets["aio_key"], wifi)
+
+# Describes feeds used to hold Adafruit IO data
+feed_aqi = io.get_feed("air-quality-sensor.aqi")
+feed_aqi_category = io.get_feed("air-quality-sensor.category")
+feed_humidity = io.get_feed("air-quality-sensor.humidity")
+feed_temperature = io.get_feed("air-quality-sensor.temperature")
+
+# Set up location metadata from secrets.py file
+location_metadata = {
+    "lat": secrets["latitude"],
+    "lon": secrets["longitude"],
+    "ele": secrets["elevation"],
+}
+```
+This code imports the files from secrets as well as the other files installed earlier. Then, it stores important data (such as location data, wifi passwords) for later usage. It also keeps tracks of the ports where the hardware was connected so it can be easily called for later usage.
+
+## Understanding how AQI works
+While temperature and humidity can easily be measured via bme280.temperature and bme280.humidity, the PM2.5 sensor doesn't directly measure AQI as easily. Instead, it measures various factors, such as 'pm10 environment', 'pm100 environment', 'pm100 standard', 'particles 03um', 'pm25 standard', and more. AQI can be calculted from the pm2.5 environment factor, known as 'pm25 env' in the code. The values of 'pm25 env', from 0 to 12, can be mapped to an AQI ranging from 0 to 50. While mapping seems difficult, the map_range command was imported from the simpleio file as listed earlier. 'pm25 env' values from 12 to 35.4 can be mapped to an AQI ranging from 51 to 100, and so on.
+
+
 
 For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
 - Technical details of what you've accomplished and how they contribute to the final goal
 - What has been surprising about the project so far
 - Previous challenges you faced that you overcame
 - What needs to be completed before your final milestone 
--->
 
 # First Milestone
 

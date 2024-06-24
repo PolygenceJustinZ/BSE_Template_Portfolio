@@ -73,6 +73,8 @@ def calculate_aqi(pm_sensor_reading):
 Now that we have a function to find the AQI, all we need to do is take the measurements from the sensors, then upload them to the Adafruit IO page. An example of taking measurements is shown below. While the code does not to follow this exact order, it is important to utilize key functions such as bme280.humidity and bme280.temperature, as well as aqdata["pm25 env"]. Otherwise, setting up a function for just the humidity and temperature isn't necessary.
 
 ```python
+USE_CELSIUS = False
+
 def read_bme(is_celsius=False):
     """Returns temperature and humidity
     from BME280/BME680 environmental sensor, as a tuple.
@@ -106,8 +108,8 @@ def sample_all_sensors():
 
         # initial timestamp
         time_start = time.monotonic()
-        # sample pm2.5 sensor over 40 sec sample duration
-        # samples every 2 seconds during the duration
+        # sample pm2.5 sensor over 50 sec sample duration
+        # samples every 5 seconds during the duration
         while (time.monotonic() - time_start) <= 50:
             try:
                 aqdata = pm25.read()
@@ -149,7 +151,7 @@ def sample_all_sensors():
 gc.enable()
 ```
 
-Outside of the function, garbage collection was also enabled, as it is just a nice thing to have, especially with the program heavily relying on error-prone hardware. Supervisor.reload() restarts the entire program. The output of the sample_all_sensors function are 3 different variables, so make sure to account for all of them during the publication. 
+Outside of the function, garbage collection was also enabled, as it is just a nice thing to have, especially with the program heavily relying on error-prone hardware. Supervisor.reload() restarts the entire program. The output of the sample_all_sensors function are 3 different variables, so make sure to account for all of them during the publication. All sensors are sampled every 5 seconds for 50 seconds, which helps keep the sensors active. The sample data goes into a list, which is averaged and cleared at the end of the function. The time.monotonic() helps keep track of accurate time. The read_bme function, which reads the data from the BME280 sensor, has an option for celsius, which is disabled, but can be enabled by setting the USE_CELSIUS variable to true. 
 
 Publication is simple, but make sure that the code accounts for errors using the try & except statements. The statements below are the important statements for publication.
 ```python
@@ -169,8 +171,9 @@ Although the code is finished, it can be modified in the future. Most importantl
 ## Challenges
 Writing the code itself was a challenge, since working with the hardware was often unreliable. The code would return inaccurate measurements, as being run too sporadically would result in low AQI values, and being run too frequently would result in high AQI values. Another challenge was dealing with the data upload rate limit for the Adafruit IO.
 
-When testing the device, it is recommended to run it in a suitable environment. The PM 2.5 sensor can sense a consderable distance compared to its size, so even air pollution from a few meters away can result in high environment sensings.
+When testing the device, it is recommended to run it in a suitable environment. The PM 2.5 sensor can sense a consderable distance compared to its size, so even air pollution from a few meters away can result in high environment sensings. 
 
+## Video
 
 For your final milestone, explain the outcome of your project. Key details to include are:
 - What you've accomplished since your previous milestone

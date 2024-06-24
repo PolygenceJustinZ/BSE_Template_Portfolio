@@ -2,7 +2,8 @@
 <!---
 Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!
 
-The IoT Air Pollution Monitor monitors the air quality, and sends the data out to the internet as an open source sensor. It is controlled via CircuitPython to allow it to function
+The IoT Air Pollution Monitor monitors the air quality, and sends the data out to the internet as an open source sensor. It is controlled via CircuitPython to allow it to function...
+It is meant for indoor home usage.
 
 You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
 -->
@@ -24,11 +25,152 @@ My main project, an IoT Air Pollution Monitor, gauges the air quality index, hum
 Since the project is an IoT (Internet of Things) device, it requires an internet connection, as well as an AC outlet. The air pollution monitor utilizes an open source sensor, as sending data to a company's web service only works until that certain company goes out of business. That is the reason to use Adafruit IO, a website that allows me to create my own system that takes data from feeds. My IoT Air Pollution Monitor will upload data to the feeds, which will be displayed via the interface on the website.
 
 <!---
-# Final Milestone - Not Started
+# Third Milestone
+For the third milestone, the code that makes the device fully work will be written. Once the code is written and saved to the device, connecting it to a power source and pressing the restart button should let the code continue to work, as long as a power source is connected. 
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
+## Understanding how AQI works
+While temperature and humidity can easily be measured via bme280.temperature and bme280.humidity, the PM2.5 sensor doesn't directly measure AQI as easily. Instead, it measures various factors, such as 'pm10 environment', 'pm100 environment', 'pm100 standard', 'particles 03um', 'pm25 standard', and more. AQI can be calculted from the pm2.5 environment factor, known as 'pm25 env' in the code. The values of 'pm25 env', from 0 to 12, can be mapped to an AQI ranging from 0 to 50. While mapping seems difficult, the map_range command was imported from the simpleio file as listed earlier. 'pm25 env' values from 12 to 35.4 can be mapped to an AQI ranging from 51 to 100, and so on.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+We can make a simple function that finds the AQI of our environment sensor reading using multiple if/else statements.
+```python
+def calculate_aqi(pm_sensor_reading):
+  try:
+        if 0.0 <= pm_sensor_reading <= 12.0:
+            # AQI calculation using EPA breakpoints (Ilow-IHigh)
+            aqi_val = map_range(int(pm_sensor_reading), 0, 12, 0, 50)
+            aqi_cat = "Good"
+        elif 12.1 <= pm_sensor_reading <= 35.4:
+            aqi_val = map_range(int(pm_sensor_reading), 12, 35, 51, 100)
+            aqi_cat = "Moderate"
+        elif 35.5 <= pm_sensor_reading <= 55.4:
+            aqi_val = map_range(int(pm_sensor_reading), 36, 55, 101, 150)
+            aqi_cat = "Unhealthy for Sensitive Groups"
+        elif 55.5 <= pm_sensor_reading <= 150.4:
+            aqi_val = map_range(int(pm_sensor_reading), 56, 150, 151, 200)
+            aqi_cat = "Unhealthy"
+        elif 150.5 <= pm_sensor_reading <= 250.4:
+            aqi_val = map_range(int(pm_sensor_reading), 151, 250, 201, 300)
+            aqi_cat = "Very Unhealthy"
+        elif 250.5 <= pm_sensor_reading <= 350.4:
+            aqi_val = map_range(int(pm_sensor_reading), 251, 350, 301, 400)
+            aqi_cat = "Hazardous"
+        elif 350.5 <= pm_sensor_reading <= 500.4:
+            aqi_val = map_range(int(pm_sensor_reading), 351, 500, 401, 500)
+            aqi_cat = "Very Hazardous"
+        else:
+            print("Invalid PM2.5 concentration")
+            aqi_val = -1
+            aqi_cat = None
+            print(aqi_val)
+            print(aqi_cat)
+        return aqi_val, aqi_cat
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+            print("Unable to read from sensor, retrying...")
+            supervisor.reload()
+```
+
+## Sampling and Publishing Data
+Now that we have a function to find the AQI, all we need to do is take the measurements from the sensors, then upload them to the Adafruit IO page. An example of taking measurements is shown below. While the code does not to follow this exact order, it is important to utilize key functions such as bme280.humidity and bme280.temperature, as well as aqdata["pm25 env"]. Otherwise, setting up a function for just the humidity and temperature isn't necessary.
+
+```python
+def read_bme(is_celsius=False):
+    """Returns temperature and humidity
+    from BME280/BME680 environmental sensor, as a tuple.
+
+    :parameter boolean is_celsius: Returns temperature in degrees celsius
+                            if True, otherwise fahrenheit.
+    """
+    try:
+        humid = bme280.humidity
+        temp = bme280.temperature
+        if not is_celsius:
+            temp = temp * 1.8 + 32
+        return temp, humid
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        print("Failed to fetch time, retrying\n", e)
+        supervisor.reload()
+
+def sample_all_sensors():
+    try:
+        aq_reading = 0
+        aq_samples = []
+
+        temp_reading = 0
+        temp_samples = []
+
+        humid_reading = 0
+        humid_samples = []
+
+        read_tries = 0
+        read_attempt_limit = 10
+
+        # initial timestamp
+        time_start = time.monotonic()
+        # sample pm2.5 sensor over 40 sec sample duration
+        # samples every 2 seconds during the duration
+        while (time.monotonic() - time_start) <= 50:
+            try:
+                aqdata = pm25.read()
+                print("Raw data")
+                print(aqdata)
+                aq_samples.append(aqdata["pm25 env"])
+                temp_reading, humid_reading = read_bme(USE_CELSIUS)
+                temp_samples.append(temp_reading)
+                humid_samples.append(humid_reading)
+                time.sleep(5)
+            except RuntimeError:
+                print("RuntimeError while reading pm25, trying again. Attempt: ", read_tries)
+                read_tries += 1
+                time.sleep(0.1)
+        if read_tries >= read_attempt_limit:
+            raise RuntimeError
+            # pm sensor output rate of 1s
+            time.sleep(3)
+        # average sample reading / # samples
+        try:
+            print("Raw Samples")
+            print(aq_samples)
+            aq_reading = sum(aq_samples) / len(aq_samples)
+            temp_reading = sum(temp_samples)/len(temp_samples)
+            humid_reading = sum(humid_samples)/len(humid_samples)
+            aq_samples = []
+            temp_samples = []
+            humid_samples = []
+            print("AQ Averaged")
+            print(aq_reading)
+            return aq_reading, temp_reading, humid_reading
+        except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+                print("Unable to read from sensor, retrying...")
+                supervisor.reload()
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+            print("Unable to read from sensor, retrying...")
+            supervisor.reload()
+
+gc.enable()
+```
+
+Outside of the function, garbage collection was also enabled, as it is just a nice thing to have, especially with the program heavily relying on error-prone hardware. Supervisor.reload() restarts the entire program. The output of the sample_all_sensors function are 3 different variables, so make sure to account for all of them during the publication. 
+
+Publication is simple, but make sure that the code accounts for errors using the try & except statements. The statements below are the important statements for publication.
+```python
+aqi_reading, temperature, humidity = sample_all_sensors()
+aqi, aqi_category = calculate_aqi(aqi_reading)
+
+io.send_data(feed_aqi["key"], str(aqi), location_metadata)
+io.send_data(feed_aqi_category["key"], aqi_category)
+io.send_data(feed_temperature["key"], str(temperature))
+io.send_data(feed_humidity["key"], str(humidity))
+```
+A sleep function is recommended to not overwork the device or Adafruit IO that manages the uploading of data, or else the code may exceed the data upload rate limit.
+
+## What's Next
+Although the code is finished, it can be modified in the future. Most importantly, a 3D-printed weatherproof enclosure is needed for this device to be safely used. Tests in the outside environment should be run to ensure the device can properly run for a full 24 hours.
+
+## Challenges
+Writing the code itself was a challenge, since working with the hardware was often unreliable. The code would return inaccurate measurements, as being run too sporadically would result in low AQI values, and being run too frequently would result in high AQI values. Another challenge was dealing with the data upload rate limit for the Adafruit IO.
+
+When testing the device, it is recommended to run it in a suitable environment. The PM 2.5 sensor can sense a consderable distance compared to its size, so even air pollution from a few meters away can result in high environment sensings.
+
 
 For your final milestone, explain the outcome of your project. Key details to include are:
 - What you've accomplished since your previous milestone
@@ -139,16 +281,14 @@ location_metadata = {
 ```
 This code imports the files from secrets as well as the other files installed earlier. Then, it stores important data (such as location data, wifi passwords) for later usage. It also keeps tracks of the ports where the hardware was connected so it can be easily called for later usage.
 
-## Understanding how AQI works
-While temperature and humidity can easily be measured via bme280.temperature and bme280.humidity, the PM2.5 sensor doesn't directly measure AQI as easily. Instead, it measures various factors, such as 'pm10 environment', 'pm100 environment', 'pm100 standard', 'particles 03um', 'pm25 standard', and more. AQI can be calculted from the pm2.5 environment factor, known as 'pm25 env' in the code. The values of 'pm25 env', from 0 to 12, can be mapped to an AQI ranging from 0 to 50. While mapping seems difficult, the map_range command was imported from the simpleio file as listed earlier. 'pm25 env' values from 12 to 35.4 can be mapped to an AQI ranging from 51 to 100, and so on.
+## What's Next
+Now with the connection set up, the device can communicate with the Adafruit IO page. Code should be written that samples the data from the sensors, calculates the AQI, and uploads all of it to the IO page. A weatherproof enclosure, as well as other modifications, are the next steps to finalize the project as well.
 
+## Challenges
+The greatest challenge comes to upload the right files to the CIRCUITPY drive. The zipped files from where the files are extracted and copied to the CIRCUITPY drive should come from the version that matches the version of CircuitPython. CircuitPython covers a multitude of factors in devices, and both the BME280 and PM2.5 is only a fraction of the files that the CircuitPython library offers.
 
+## Video
 
-For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
-- Technical details of what you've accomplished and how they contribute to the final goal
-- What has been surprising about the project so far
-- Previous challenges you faced that you overcame
-- What needs to be completed before your final milestone 
 
 # First Milestone
 

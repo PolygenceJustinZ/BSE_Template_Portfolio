@@ -15,6 +15,12 @@ You should comment out all portions of your portfolio that you have not complete
 
 <!--
 The image of myself and my completed project will come in the future. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
+
+For your final milestone, explain the outcome of your project. Key details to include are:
+- What you've accomplished since your previous milestone
+- What your biggest challenges and triumphs were at BSE
+- A summary of key topics you learned about
+- What you hope to learn in the future after everything you've learned at BSE
 -->
 
 <img src="assets/css/Justin_Z.JPG" width="450" height="600">
@@ -24,7 +30,6 @@ My main project, an IoT Air Pollution Monitor, gauges the air quality index, hum
 
 Since the project is an IoT (Internet of Things) device, it requires an internet connection, as well as an AC outlet. The air pollution monitor utilizes an open source sensor, as sending data to a company's web service only works until that certain company goes out of business. That is the reason to use Adafruit IO, a website that allows me to create my own system that takes data from feeds. My IoT Air Pollution Monitor will upload data to the feeds, which will be displayed via the interface on the website.
 
-<!---
 # Third Milestone
 For the third milestone, the code that makes the device fully work will be written. Once the code is written and saved to the device, connecting it to a power source and pressing the restart button should let the code continue to work, as long as a power source is connected. 
 
@@ -109,7 +114,7 @@ def sample_all_sensors():
         # initial timestamp
         time_start = time.monotonic()
         # sample pm2.5 sensor over 50 sec sample duration
-        # samples every 5 seconds during the duration
+        # samples only once to avoid rounding errors
         while (time.monotonic() - time_start) <= 50:
             try:
                 aqdata = pm25.read()
@@ -119,7 +124,7 @@ def sample_all_sensors():
                 temp_reading, humid_reading = read_bme(USE_CELSIUS)
                 temp_samples.append(temp_reading)
                 humid_samples.append(humid_reading)
-                time.sleep(5)
+                break
             except RuntimeError:
                 print("RuntimeError while reading pm25, trying again. Attempt: ", read_tries)
                 read_tries += 1
@@ -174,13 +179,6 @@ Writing the code itself was a challenge, since working with the hardware was oft
 When testing the device, it is recommended to run it in a suitable environment. The PM 2.5 sensor can sense a consderable distance compared to its size, so even air pollution from a few meters away can result in high environment sensings. 
 
 ## Video
-
-For your final milestone, explain the outcome of your project. Key details to include are:
-- What you've accomplished since your previous milestone
-- What your biggest challenges and triumphs were at BSE
-- A summary of key topics you learned about
-- What you hope to learn in the future after everything you've learned at BSE
--->
 
 
 # Second Milestone

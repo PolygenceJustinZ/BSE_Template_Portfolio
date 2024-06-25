@@ -168,7 +168,7 @@ io.send_data(feed_aqi_category["key"], aqi_category)
 io.send_data(feed_temperature["key"], str(temperature))
 io.send_data(feed_humidity["key"], str(humidity))
 ```
-A sleep function is recommended to not overwork the device or Adafruit IO that manages the uploading of data, or else the code may exceed the data upload rate limit.
+A sleep function of a minute is recommended to not overwork the device or Adafruit IO that manages the uploading of data, or else the code may exceed the data upload rate limit.
 
 ## What's Next
 Although the code is finished, it can be modified in the future. Most importantly, a 3D-printed weatherproof enclosure is needed for this device to be safely used. Tests in the outside environment should be run to ensure the device can properly run for a full 24 hours.

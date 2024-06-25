@@ -113,8 +113,10 @@ def sample_all_sensors():
 
         # initial timestamp
         time_start = time.monotonic()
+
         # sample pm2.5 sensor over 50 sec sample duration
         # samples only once to avoid rounding errors
+        # uses sleep and break commands
         while (time.monotonic() - time_start) <= 50:
             try:
                 aqdata = pm25.read()
@@ -124,6 +126,7 @@ def sample_all_sensors():
                 temp_reading, humid_reading = read_bme(USE_CELSIUS)
                 temp_samples.append(temp_reading)
                 humid_samples.append(humid_reading)
+                time.sleep(50)
                 break
             except RuntimeError:
                 print("RuntimeError while reading pm25, trying again. Attempt: ", read_tries)

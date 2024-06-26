@@ -184,7 +184,7 @@ Writing the code itself was a challenge, since working with the hardware was oft
 When testing the device, it is recommended to run it in a suitable environment. The PM 2.5 sensor can sense a consderable distance compared to its size, so even air pollution from a few meters away can result in high environment sensings. 
 
 ## Video
-
+<iframe width="1280" height="720" src="https://www.youtube.com/embed/3GGz_5pTfrA?list=PLe-u_DjFx7evDJ6N_vX36J16ru7SvHV5m" title="Justin Z. Third Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 # Second Milestone
 

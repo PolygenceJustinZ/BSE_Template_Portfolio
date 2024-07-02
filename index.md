@@ -24,6 +24,7 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 MODIFICATION: I WAS UNHAPPY WITH THE WAY MAP_RANGE WORKED, AND AVERAGING THE AQ WOULD BE FLOORED, SO I CHANGED CODE TO MEASURE MULTIPLE AQ AND CALCULATE AQI, THEN ROUND THEM ALL. CALCULATE AQI NOT USED IN WHILE TRUE, INSTEAD USED IN CALCULATE_ALL_SAMPLES FUNCTION. REDESIGNED ENTIRE CODE TO BE EASIER TO READ
 MODIFICATION: I ADDED IS_LOGGING BOOLEAN
+
 -->
 
 <img src="assets/css/Justin_Z.JPG" width="450" height="600">
@@ -32,6 +33,33 @@ MODIFICATION: I ADDED IS_LOGGING BOOLEAN
 My main project, an IoT Air Pollution Monitor, gauges the air quality index, humidity, and temperature, and is controlled by an external device via CircuitPython. Thus, to effectively complete the project, it is necessary to understand CircuitPython as well as the air quality monitor itself.
 
 Since the project is an IoT (Internet of Things) device, it requires an internet connection, as well as an AC outlet. The air pollution monitor utilizes an open source sensor, as sending data to a company's web service only works until that certain company goes out of business. That is the reason to use Adafruit IO, a website that allows me to create my own system that takes data from feeds. My IoT Air Pollution Monitor will upload data to the feeds, which will be displayed via the interface on the website.
+
+<!--
+# Modifications
+Throughout the project, I made multiple modifications in an attempt to make the Air Pollution Monitor more unique and usable. Without them, the air pollution monitor would simply be a bare-bones design. The more modifications meant the better the project, so I spent a while brainstorming potential modifications.
+
+## Enclosure Modification
+### Blueprint
+
+### CAD 
+
+
+## Piezo Buzzer
+### Wiring
+
+### Code
+
+## Rewritten Code
+I was dissatisfied at the code. The code prevented the device from working optimally, as it had a slow and inaccruate measurements. During the time spent creating the device, I often added slight adjustments to the code to help improve its functionality. However, the slight adjustments to variables wasn't enough, and only made the code messier. Thus, it was time to rewrite the entire code, except for a few crucial components (such as the imports.)
+### Remaking definitions
+### Faster sampling time
+### Accurate Measurements
+### Logging
+
+## Challenges
+Overall, the modifications took longer than the device itself. 
+## Video
+-->
 
 # Third Milestone
 For the third milestone, the code that makes the device fully work will be written. Once the code is written and saved to the device, connecting it to a power source and pressing the restart button should let the code continue to work, as long as a power source is connected. 

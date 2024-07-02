@@ -471,6 +471,7 @@ I used various components in the creation of my IoT Air Pollution Monitor. Howev
 | Silicone Cover Standed-Core Ribbon Cable | Acts as the wires for the board | $1.95 | <a href="https://www.adafruit.com/product/3889"> Link </a> |
 | 5V 2A Switching Power Supply | Lets the board connect to power | $7.95 | <a href="https://www.adafruit.com/product/1994"> Link </a> |
 | USB A/Micro Cable | Lets the board connect to power | $4.95 | <a href="https://www.adafruit.com/product/2185"> Link </a> |
+| QEEUBOVY Quick Charge Power Bank | Acts as the power supply for the device | $13.99 | <a href="https://www.amazon.com/Smallest-Portable-Charging-Competible-Essentials/dp/B0CKNGTDLY/ref=sr_1_16?dib=eyJ2IjoiMSJ9.gxLOXRI_yCUIppyNCwHl6TeBp7PotJ4Y4SjMzGX28EWL_auQkIKWaLGyQvmSUYXcPbkU_giFiG6Dx6xN61tGe28MX6nacov8xSrZVWwTlGAiVW8kmTr6NMOo6DV3kyD_fwulONu5uAwzXuDvCo1GNsi9IwmKSKbFKELhhPJ7EM_dib1yYK-zcXePhyI05JX9u1SdyNYHdUi7kPCRr_rBOTWu-4x54-TvDhoMNm2jOvs.PhOv9jl69UNjX3b_ijdELLd4V4SfUYgQunw33g5935o&dib_tag=se&hvadid=664624701487&hvdev=c&hvlocphy=9061320&hvnetw=g&hvqmt=b&hvrand=3106670759621317154&hvtargid=kwd-297941941862&hydadcr=22005_13484882&keywords=smallest+most+powerful+power+bank&qid=1719530920&sr=8-16"> Link </a> |
 
 <!---
 # Other Resources/Examples

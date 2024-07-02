@@ -59,7 +59,13 @@ I was dissatisfied at the code. The code prevented the device from working optim
 
 ## Challenges
 Overall, the modifications took longer than the device itself. 
+
 ## Video
+
+## Greatest Challenges & Triumphs
+## Key Topics Learned
+## Future Plans after Bluestamp Engineering
+What I want to learn in the future after Bluestamp Engineering is```````````````````````````````````````````````````````````````````````````````````    
 -->
 
 # Third Milestone

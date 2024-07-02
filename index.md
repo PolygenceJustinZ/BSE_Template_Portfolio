@@ -40,6 +40,7 @@ Throughout the project, I made multiple modifications in an attempt to make the 
 
 ## Enclosure Modification
 ### Blueprint
+I used powerbank
 
 ### CAD 
 

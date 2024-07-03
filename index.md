@@ -44,18 +44,21 @@ I used powerbank
 
 ### CAD 
 
-
-## Piezo Buzzer
-### Wiring
-
-### Code
-
 ## Rewritten Code
 I was dissatisfied at the code. The code prevented the device from working optimally, as it had a slow and inaccruate measurements. During the time spent creating the device, I often added slight adjustments to the code to help improve its functionality. However, the slight adjustments to variables wasn't enough, and only made the code messier. Thus, it was time to rewrite the entire code, except for a few crucial components (such as the imports.)
 ### Remaking definitions
 ### Faster sampling time
 ### Accurate Measurements
 ### Logging
+
+## Piezo Buzzer
+### Wiring
+### Code
+
+## WiFi LED
+### Wiring
+### Code
+### LED Hole
 
 ## Challenges
 Overall, the modifications took longer than the device itself. 

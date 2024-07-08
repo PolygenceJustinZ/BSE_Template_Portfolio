@@ -663,17 +663,329 @@ Here's where you'll put images of your schematics. [Tinkercad](https://www.tinke
 # Code
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
 
-```c++
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("Hello World!");
+```python
+# imports
+import time
+import board
+import busio
+import simpleio
+from digitalio import DigitalInOut, Direction, Pull
+from adafruit_esp32spi import adafruit_esp32spi, adafruit_esp32spi_wifimanager
+from adafruit_io.adafruit_io import IO_HTTP
+from simpleio import map_range
+from adafruit_pm25.uart import PM25_UART
+from adafruit_bme280 import basic as adafruit_bme280
+import supervisor
+import gc
+import adafruit_pm25
+import adafruit_bme280
+from adafruit_bme280 import basic as adafruit_bme280
+
+# Logging boolean
+# There are various prints to serial/console, this enables/disables them
+IS_LOGGING = True
+
+# Configure Sensor
+# Return environmental sensor readings in degrees Celsius
+USE_CELSIUS = False
+
+# Configure Piezo
+# Sets to False to ensure it is off
+PIEZO_PIN = DigitalInOut(board.D5)
+PIEZO_PIN.direction = Direction.OUTPUT
+PIEZO_PIN.value = False
+
+# Configure WiFi LED
+# Sets to False when program restarts
+WIFI_LED = DigitalInOut(board.D6)
+WIFI_LED.direction = Direction.OUTPUT
+WIFI_LED.value = False
+
+
+# Sensor Functions
+
+# calculate AQI with pm25 env function
+def calculate_aqi(pm_sensor_reading):
+    # Check sensor reading using EPA breakpoint
+    try:
+        if 0.0 <= pm_sensor_reading <= 12.0:
+            # AQI calculation using EPA breakpoints (Ilow-IHigh)
+            aqi_val = map_range(int(pm_sensor_reading), 0, 12, 0, 50)
+        elif 12.1 <= pm_sensor_reading <= 35.4:
+            aqi_val = map_range(int(pm_sensor_reading), 12, 35, 51, 100)
+        elif 35.5 <= pm_sensor_reading <= 55.4:
+            aqi_val = map_range(int(pm_sensor_reading), 36, 55, 101, 150)
+        elif 55.5 <= pm_sensor_reading <= 150.4:
+            aqi_val = map_range(int(pm_sensor_reading), 56, 150, 151, 200)
+        elif 150.5 <= pm_sensor_reading <= 250.4:
+            aqi_val = map_range(int(pm_sensor_reading), 151, 250, 201, 300)
+        elif 250.5 <= pm_sensor_reading <= 350.4:
+            aqi_val = map_range(int(pm_sensor_reading), 251, 350, 301, 400)
+        elif 350.5 <= pm_sensor_reading <= 500.4:
+            aqi_val = map_range(int(pm_sensor_reading), 351, 500, 401, 500)
+        else:
+            if IS_LOGGING:
+                print("Invalid PM2.5 AQI")
+            # High AQI value to notify calculate_cat even after averaging
+            aqi_val = -999999
+        return aqi_val
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        # notifies that this specific function broke, then restarts program
+        if IS_LOGGING:
+            print("calculate_AQI error, retrying...")
+        supervisor.reload()
+
+# calculates Air Quality category function
+# similar to calculate_aqi function except uses AQI as parameter
+def calculate_cat(aqi_param):
+    try:
+        if 0.0 <= aqi_param <= 50:
+            aqi_cat = "Good"
+        elif 50.1 <= aqi_param <= 100:
+            aqi_cat = "Moderate"
+        elif 100.1 <= aqi_param <= 150:
+            aqi_cat = "Unhealthy for Sensitive Groups"
+        elif 150.1 <= aqi_param <= 200:
+            aqi_cat = "Unhealthy"
+        elif 200.1 <= aqi_param <= 300:
+            aqi_cat = "Very Unhealthy"
+        elif 300.1 <= aqi_param <= 400:
+            aqi_cat = "Hazardous"
+        elif 400.1 <= aqi_param <= 500:
+            aqi_cat = "Very Hazardous"
+        else:
+            if IS_LOGGING:
+                print("Invalid AQI category")
+            aqi_cat = None
+            PIEZO_PIN.value = True
+        return aqi_cat
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        # notifies that this specific function broke, then restarts program
+        if IS_LOGGING:
+            print("calculate_cat error, retrying...")
+        supervisor.reload()
+
+
+
+# reading temperature and humidity values from the BME280 function
+# separate function so easy to configure
+# is_celsius boolean
+def read_bme(is_celsius=False):
+    try:
+        humid = bme280.humidity
+        temp = bme280.temperature
+        if not is_celsius:
+            temp = temp * 1.8 + 32
+        return temp, humid
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        # notifies that this specific function broke, then restarts program
+        if IS_LOGGING:
+            print("read_bme error, retrying\n", e)
+        supervisor.reload()
+
+# samples from all sensors, returns AQI instead of aq_reading
+# calculates the AQI within the function
+def sample_all_sensors():
+    try:
+        temp_reading = 0
+        temp_samples = []
+
+        humid_reading = 0
+        humid_samples = []
+
+        aqi_calculation = 0
+        aqi_samples = []
+
+        read_tries = 0
+        read_attempt_limit = 10
+
+        # initial timestamp
+        time_start = time.monotonic()
+        # sample pm2.5 sensor over 45 sec sample duration
+        # samples every 9 seconds
+        # result is 5 readings for aqi, temp, and humid samples
+        while (time.monotonic() - time_start) <= 45:
+            try:
+                aqdata = pm25.read()
+                if IS_LOGGING:
+                    print("Raw data")
+                    print(aqdata)
+                aqi_calculation = calculate_aqi(aqdata["pm25 env"])
+                aqi_samples.append(aqi_calculation)
+                temp_reading, humid_reading = read_bme(USE_CELSIUS)
+                temp_samples.append(temp_reading)
+                humid_samples.append(humid_reading)
+                time.sleep(9)
+            except RuntimeError:
+                if IS_LOGGING:
+                    print("RuntimeError while reading pm25, trying again. Attempt: ", read_tries)
+                read_tries += 1
+                time.sleep(0.1)
+        if read_tries >= read_attempt_limit:
+            raise RuntimeError
+            # pm sensor output rate of 1s
+            time.sleep(3)
+        # average sample reading
+        try:
+            if IS_LOGGING:
+                print("AQI Samples")
+                print(aqi_samples)
+            aqi_calculation = sum(aqi_samples) / len(aqi_samples)
+            temp_reading = sum(temp_samples)/len(temp_samples)
+            humid_reading = sum(humid_samples)/len(humid_samples)
+            aqi_samples = []
+            temp_samples = []
+            humid_samples = []
+            if IS_LOGGING:
+                print("AQI, Temp, Humid Averaged")
+                print(aqi_calculation)
+                print(temp_reading)
+                print(humid_reading)
+            return aqi_calculation, temp_reading, humid_reading
+        except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+            # notifies that this specific function broke, then restarts program
+            if IS_LOGGING:
+                print("sample_all_sensor return error, retrying...")
+            supervisor.reload()
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        # notifies that this specific function broke, then restarts program
+        if IS_LOGGING:
+            print("sample_all_sensor general error, retrying...")
+        supervisor.reload()
+
+# enable trash collection
+gc.enable()
+
+# Interval the sensor publishes to Adafruit IO
+PUBLISH_INTERVAL = 1
+
+### WiFi ###
+# Get wifi details and more from a secrets.py file
+try:
+    from secrets import secrets
+except ImportError:
+    print("WiFi secrets are kept in secrets.py, please add them there!")
+    raise
+
+# AirLift FeatherWing
+esp32_cs = DigitalInOut(board.D13)
+esp32_ready = DigitalInOut(board.D11)
+esp32_reset = DigitalInOut(board.D12)
+esp32_gpio0 = DigitalInOut(board.D10)
+spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
+esp = adafruit_esp32spi.ESP_SPIcontrol(
+    spi, esp32_cs, esp32_ready, esp32_reset, esp32_gpio0
+)
+
+wifi = adafruit_esp32spi_wifimanager.ESPSPI_WiFiManager(esp, secrets, status_pixel=None, attempts=4)
+if IS_LOGGING:
+    print("Connecting to WiFi...")
+wifi.connect()
+if IS_LOGGING:
+    print("Connected to WiFi with IP Address:", wifi.esp.pretty_ip(wifi.esp.ip_address))
+WIFI_LED.value = True
+# Connect to a PM2.5 sensor over UART
+reset_pin = DigitalInOut(board.D9)
+reset_pin.direction = Direction.OUTPUT
+uart = busio.UART(board.TX, board.RX, baudrate=9600)
+pm25 = PM25_UART(uart, reset_pin)
+
+# Create i2c object
+i2c = board.I2C()
+
+# Connect to a BME280 over I2C
+bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=0x77)
+
+# Create an instance of the Adafruit IO HTTP client
+io = IO_HTTP(secrets["aio_username"], secrets["aio_key"], wifi)
+
+# Describes feeds used to hold Adafruit IO data
+feed_aqi = io.get_feed("air-quality-sensor.aqi")
+feed_aqi_category = io.get_feed("air-quality-sensor.category")
+feed_humidity = io.get_feed("air-quality-sensor.humidity")
+feed_temperature = io.get_feed("air-quality-sensor.temperature")
+
+# Set up location metadata from secrets.py file
+location_metadata = {
+    "lat": secrets["latitude"],
+    "lon": secrets["longitude"],
+    "ele": secrets["elevation"],
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+elapsed_minutes = 0
+aqi_array = []
+temp_array = []
+humid_array = []
 
-}
+while True:
+    try:
+        if IS_LOGGING:
+            print("Fetching time...")
+        cur_time = io.receive_time()
+        if IS_LOGGING:
+            print("Time fetched OK!")
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        if IS_LOGGING:
+            print("Failed to fetch time, retrying\n", e)
+        supervisor.reload()
+    try:
+        # samples AQI, Temperature, Humidity from all sensors, then adds them to lists
+        elapsed_minutes += 1
+        if IS_LOGGING:
+            print("Sampling all sensors...")
+        aqi, temperature, humidity = sample_all_sensors()
+        aqi_array.append(aqi)
+        temp_array.append(temperature)
+        humid_array.append(humidity)
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        if IS_LOGGING:
+            print("Failed to fetch time, retrying\n", e)
+        supervisor.reload()
+    try:
+        if elapsed_minutes >= PUBLISH_INTERVAL:
+            aqi = sum(aqi_array)/len(aqi_array)
+            aqi_array = []
+            temperature = sum(temp_array)/len(temp_array)
+            temp_array = []
+            humidity = sum(humid_array)/len(humid_array)
+            humid_array = []
+            aqi_category = calculate_cat(aqi)
+
+            if IS_LOGGING:
+                print("AQI: %d" % aqi)
+                print("Category: %s" % aqi_category)
+                print("Sampling environmental sensor...")
+                print("Temperature: %0.1f F" % temperature)
+                print("Humidity: %0.1f %%" % humidity)
+                # Publish all values to Adafruit IO
+                print("Publishing to Adafruit IO...")
+
+            # Publishing
+            # this if/else statement checks if the data is appropriate or from an error
+            # only case where aqi is less than 0 is if calculate_aqi read -999999
+            # else, it will publish a negative AQI and Invalid category
+            if aqi >= -1:
+                io.send_data(feed_aqi["key"], str(aqi), location_metadata)
+                io.send_data(feed_aqi_category["key"], aqi_category)
+            else:
+                aqi = -10
+                io.send_data(feed_aqi["key"], str(aqi), location_metadata)
+                io.send_data(feed_aqi_category["key"], "Invalid")
+            io.send_data(feed_temperature["key"], str(temperature))
+            io.send_data(feed_humidity["key"], str(humidity))
+            if IS_LOGGING:
+                print("Published!")
+            elapsed_minutes = 0
+
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        if IS_LOGGING:
+            print("Failed to send data to IO, retrying\n", e)
+        PIEZO_PIN.value = False
+        supervisor.reload()
+        # Reset timer
+    PIEZO_PIN.value = False
+    time.sleep(45)
+
 ```
 -->
 # Bill of Materials

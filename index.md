@@ -34,34 +34,243 @@ My main project, an IoT Air Pollution Monitor, gauges the air quality index, hum
 
 Since the project is an IoT (Internet of Things) device, it requires an internet connection, as well as an AC outlet. The air pollution monitor utilizes an open source sensor, as sending data to a company's web service only works until that certain company goes out of business. That is the reason to use Adafruit IO, a website that allows me to create my own system that takes data from feeds. My IoT Air Pollution Monitor will upload data to the feeds, which will be displayed via the interface on the website.
 
-<!--
+
 # Modifications
 Throughout the project, I made multiple modifications in an attempt to make the Air Pollution Monitor more unique and usable. Without them, the air pollution monitor would simply be a bare-bones design. The more modifications meant the better the project, so I spent a while brainstorming potential modifications.
 
 ## Enclosure Modification
-### Blueprint
-I used powerbank
+My 3D printed enclosure would be made with the help of CAD, which means computer aided design. Before CAD, I needed to make certain decisions on how my enclosure would look like. For example, my device needed a source of power, so I had to decide to use a battery, or a wire leading out of the enclosure. I settled on using a rechargable powerbank, which was both a battery and a wire leading out of the enclosure. My enclosure needed a hole for my PM2.5 fan, but if it were too big, then the fan and the device could be exposed to conditions that would cause irreversible damage.
 
-### CAD 
+### Blueprint
+Before I worked on my CAD Design, I drafted how my project would look like at first. Since CAD accepts both inches and millimeters, my sketch used both of those, since my parts came in both inches and millimeters. My design would use screws to keep my device attached to the walls, so I made screw holes in both the base panel and the lid. I separated the base into 3 compartments, being the device compartment, the power bank compartment, and an additional space used to store excess wires or any additional enclosure modification in the future.
+
+I made two sketches, with my first one getting the measurements of all the components I would use, including screw holes, the device, and the USB length. During this phase, I didn't know what my exact power bank size would be, so I used a variable to represent it. The purpose of the first blueprint was only to remind me of the important dimensions more than the actual CAD design.
+
+<img src="assets/css/Blueprint1.jpg" width="450" height="525">
+<i>Remember that these blueprints are an early design, and that not everything, including the dimensions, were going to be concrete.</i>
+<br></br>
+My second sketch was a top-down view of the project. This would make my CAD design far easier when following the sketch. The only portions this sketch didn't include was the holes. The purpose of the second sketch was for easy replication, not concrete replication, since certain measurements in the enclosure draft was inaccurate. 
+
+<img src="assets/css/Blueprint2.jpg" width = "450" height="525">
+<i>Using both inches and millimeters in a design is very risky and confusing, thus I would recommend to just use millimeters.</i>
+
+### CAD
+Utilizing onShape, since it was a free CAD without the need of downloading it, the design could be easily created. The CAD organizes the various components in a top-down list, with the objects at the top happening first. While that sounds simple, it means that the order heavily matters. For example, extrusions can't be organized above the sketch if the extrusion is based on the sketch. Additionally, subtraction booleans, which take two parts and subtract them, have to be ordered below all the extrusions and sketches involved.
+
+First, I started with the base panel. Since I was new to onShape, I learned as I created the design. The sketch used center-point circles of differing diameters, and the holes used booleans. <br></br>
+<img src="assets/css/Mod_BasePanel.png" width="450" height="315">
+
+Adding the main body of the design to the panel, tools such as dimensioning and making lines tangent were used.<br></br>
+<img src="assets/css/Mod_Base1.png" width="450" height="315">
+
+Finally, a lid was added in a separate file. It is important to put non-connected portions in separate files for printing.<br></br>
+<img src="assets/css/Mod_Lid.png" width="450" height="315">
+
+The CAD designs can be modified in the future in the event of implementing new design-altering modifications.
 
 ## Rewritten Code
-I was dissatisfied at the code. The code prevented the device from working optimally, as it had a slow and inaccruate measurements. During the time spent creating the device, I often added slight adjustments to the code to help improve its functionality. However, the slight adjustments to variables wasn't enough, and only made the code messier. Thus, it was time to rewrite the entire code, except for a few crucial components (such as the imports.)
-### Remaking definitions
+I was dissatisfied at the code. The code prevented the device from working optimally, as it had a slow and inaccurate measurements. During the time spent creating the device, I often added slight adjustments to the code to help improve its functionality. However, the slight adjustments to variables wasn't enough, and only made the code messier. Thus, it was time to rewrite the entire code, except for a few crucial components (such as the imports.) The entire completed code is shown near the bottom of the portfolio for replication purposes. Thus, this modification section only contains snippets.
+
+### Redefining definitions
+An issue I faced was having both AQI category and AQI in the same function. One returned variable could be averaged, while another couldn't. Thus, the calculate_AQI function calculated the averaged PM2.5 readings. However, since map_range didn't work with decimals, the AQI was always rounded (0, 4, 8.3, etc.), meaning there was no in-between. By splitting the functions, I could calculate and average the accurate AQI, then find the category right before publication. 
+
+```python
+# calculate AQI with pm25 env function
+def calculate_aqi(pm_sensor_reading):
+    # Check sensor reading using EPA breakpoint
+    try:
+        if 0.0 <= pm_sensor_reading <= 12.0:
+            # AQI calculation using EPA breakpoints (Ilow-IHigh)
+            aqi_val = map_range(int(pm_sensor_reading), 0, 12, 0, 50)
+        elif 12.1 <= pm_sensor_reading <= 35.4:
+            aqi_val = map_range(int(pm_sensor_reading), 12, 35, 51, 100)
+        elif 35.5 <= pm_sensor_reading <= 55.4:
+            aqi_val = map_range(int(pm_sensor_reading), 36, 55, 101, 150)
+        elif 55.5 <= pm_sensor_reading <= 150.4:
+            aqi_val = map_range(int(pm_sensor_reading), 56, 150, 151, 200)
+        elif 150.5 <= pm_sensor_reading <= 250.4:
+            aqi_val = map_range(int(pm_sensor_reading), 151, 250, 201, 300)
+        elif 250.5 <= pm_sensor_reading <= 350.4:
+            aqi_val = map_range(int(pm_sensor_reading), 251, 350, 301, 400)
+        elif 350.5 <= pm_sensor_reading <= 500.4:
+            aqi_val = map_range(int(pm_sensor_reading), 351, 500, 401, 500)
+        else:
+            if IS_LOGGING:
+                print("Invalid PM2.5 AQI")
+            # High AQI value to notify calculate_cat even after averaging
+            aqi_val = -999999
+        return aqi_val
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        # notifies that this specific function broke, then restarts program
+        if IS_LOGGING:
+            print("calculate_AQI error, retrying...")
+        supervisor.reload()
+
+# calculates Air Quality category function
+# similar to calculate_aqi function except uses AQI as parameter
+def calculate_cat(aqi_param):
+    try:
+        if 0.0 <= aqi_param <= 50:
+            aqi_cat = "Good"
+        elif 50.1 <= aqi_param <= 100:
+            aqi_cat = "Moderate"
+        elif 100.1 <= aqi_param <= 150:
+            aqi_cat = "Unhealthy for Sensitive Groups"
+        elif 150.1 <= aqi_param <= 200:
+            aqi_cat = "Unhealthy"
+        elif 200.1 <= aqi_param <= 300:
+            aqi_cat = "Very Unhealthy"
+        elif 300.1 <= aqi_param <= 400:
+            aqi_cat = "Hazardous"
+        elif 400.1 <= aqi_param <= 500:
+            aqi_cat = "Very Hazardous"
+        else:
+            if IS_LOGGING:
+                print("Invalid AQI category")
+            aqi_cat = None
+            PIEZO_PIN.value = True
+        return aqi_cat
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        # notifies that this specific function broke, then restarts program
+        if IS_LOGGING:
+            print("calculate_cat error, retrying...")
+        supervisor.reload()
+```
+These split functions additionally have a new method of handling too high AQ readings. By setting the aqi_val variable (in the calculate_AQI function) to -999999 in the event of a PM2.5 too high, it cannot be averaged to become a normal aqi parameter when being fed into the calculate_cat function. (The AQI is averaged first, before being put into the calculate_cat function. If the range of values was -999999, 100, 100, 100, 100, 100, the average would still trigger the else statement in calculate_cat.)
+
 ### Faster sampling time
+The original code sampled once every 10 minutes, which is extremely long. I made a modification to sample it every 50 seconds, but that was only once every 50 seconds. Now, the program samples every 9 seconds over a 45 second duration, which means the removal of the break command. A quick snippet of the code is shown below.
+```python
+while (time.monotonic() - time_start) <= 45:
+            try:
+                aqdata = pm25.read()
+                if IS_LOGGING:
+                    print("Raw data")
+                    print(aqdata)
+                aqi_calculation = calculate_aqi(aqdata["pm25 env"])
+                aqi_samples.append(aqi_calculation)
+                temp_reading, humid_reading = read_bme(USE_CELSIUS)
+                temp_samples.append(temp_reading)
+                humid_samples.append(humid_reading)
+                time.sleep(9)
+```
+An additional modification within this snippet is calculating the aqi for every AQ sample from the pm2.5, since the functions were split. More of that is covered in the accurate measurements section.
+
+Speaking of time, certain time usages in the code were removed, as they didn't serve much purpose and were mainly just error-prone clutter. The Adafruit IO marks the time of when the data was recieved, thus time wasn't as important in the code, except for the 45-second measuring interval. Outside of that, the time wasn't necessary.
+
 ### Accurate Measurements
+Since the AQ is calculated, there isn't a need for an AQ variable or an AQ list. Instead, aqi_calculation and aqi_samples replaced them. In the sample_all_sensors function, the aqi_samples are averaged after the sampling alongside the humidity and temperature. The calculate_cat function isn't used until before publication. 
+
+Sample_all_sensors returns the averaged AQI, Humidity, and Temperature, instead of the averaged aq, humidity, and temperature. This snippet shows where the calculate_cat function is used.
+```python
+if elapsed_minutes >= PUBLISH_INTERVAL:
+            aqi = sum(aqi_array)/len(aqi_array)
+            aqi_array = []
+            temperature = sum(temp_array)/len(temp_array)
+            temp_array = []
+            humidity = sum(humid_array)/len(humid_array)
+            humid_array = []
+            aqi_category = calculate_cat(aqi)
+
+            if IS_LOGGING:
+                print("AQI: %d" % aqi)
+                print("Category: %s" % aqi_category)
+                print("Sampling environmental sensor...")
+                print("Temperature: %0.1f F" % temperature)
+                print("Humidity: %0.1f %%" % humidity)
+                # Publish all values to Adafruit IO
+                print("Publishing to Adafruit IO...")
+
+            # Publishing
+            # this if/else statement checks if the data is appropriate or from an error
+            # only case where aqi is less than 0 is if calculate_aqi read -999999
+            # else, it will publish a negative AQI and Invalid category
+            if aqi >= -1:
+                io.send_data(feed_aqi["key"], str(aqi), location_metadata)
+                io.send_data(feed_aqi_category["key"], aqi_category)
+            else:
+                aqi = -10
+                io.send_data(feed_aqi["key"], str(aqi), location_metadata)
+                io.send_data(feed_aqi_category["key"], "Invalid")
+            io.send_data(feed_temperature["key"], str(temperature))
+            io.send_data(feed_humidity["key"], str(humidity))
+            if IS_LOGGING:
+                print("Published!")
+            elapsed_minutes = 0
+```
+The only inaccurate portion of this is setting the aqi to -10 in the event of a too-high AQ reading. Realistically, the AQI could be any number beyond 150, but my current code is unable to accurately mark the value. For replication purposes, the calculate_aqi and calculate_cat functions can be modified to have extra values for higher AQ levels. For example, the program tends to result in -10 AQI's after a long night of fireworks (since the air quality gets extremely hazardous!)
+
 ### Logging
+Some snippets include an IS_LOGGING boolean as an if-statement. The original code had a lack of descriptive descriptions and errors. Additionally, there are multiple print functions that while helpful, still can clutter the serial. The IS_LOGGING boolean determines whether to have this commentary printed out or not. 
+
+An example of logging is shown in this snippet:
+```python
+    except (ValueError, RuntimeError, ConnectionError, OSError) as e:
+        # notifies that this specific function broke, then restarts program
+        if IS_LOGGING:
+            print("sample_all_sensor general error, retrying...")
+        supervisor.reload()
+```
+
+Additionally commentary and more descriptive print errors were a modification in my code, and while they seem miniscule, they are EXTREMELY helpful in understanding and replicating the code!
 
 ## Piezo Buzzer
+While the exceptions were created in the calculate_aqi and calculate_cat functions to handle extremely high AQ values (since the original code would result in an error,) beyond-hazardous AQI values are more deadly to people than it is to the device. Thus, a piezo buzzer was implemented as a miniature alarm, similar to a smoke detector.
+
 ### Wiring
+As the piezo buzzer doesn't require a resistor, the wiring was relatively simple (though wiring with a resistor isn't very difficult either.) The most important part of the piezo is connecting it to an available port, and there were only 2 available ports remaining in the Featherwing Doubler (the esp32 alone requires 4 ports!)
+
+<img src="assets/css/Mod_Piezo.jpg" width="450" height="520">
+Other than the port, the piezo buzzer is connected to the ground rail. A soldered link was created underneath the board since not every hole was connected in the doubler. This link was between the wire and the Piezo buzzer. 
+
+While this was the first physical modification (other than the enclosure), this modification did not require the enclosure to change its design.
+
 ### Code
+My buzzer was connected to port5 of the doubler. As the buzzer is an output, setting the value to true would cause a high pitched sound, while setting the value to low would turn it off. 
+```python
+# Configure Piezo
+# Sets to False to ensure it is off
+PIEZO_PIN = DigitalInOut(board.D5)
+PIEZO_PIN.direction = Direction.OUTPUT
+PIEZO_PIN.value = False
+```
+The appropriate time to enable the buzzer is under the event where the AQ is too high. However, since having the loud buzzer on for too long would more detrimental to people than the hazardous air quality, the buzzer is enabled under the calculate_cat function, then disabled after publication. 
 
 ## WiFi LED
-### Wiring
-### Code
-### LED Hole
+While the Arduino Feather M4 lights up to show it is plugged in, it also doesn't show the status of the program. For example, code errors can halt the entire program, but this halting of the program is undetectable. If the program cannot connect to the SSID, or the location it is in doesn't have that SSID, then it will be stuck trying to connect to a different WiFi (just like trying to connecting to your home wifi while across the country.) The WiFi LED lights up when the WiFi is successfully connected, and the LED being off indicates the device should be examined.
 
+### Wiring
+The wiring of the LED is similar to the Piezo buzzer, except that it uses a resistor. The position of the resistor doesn't matter if it comes between the power to the LED or between the LED and the ground rail. Additionally, the LED is placed on the Feather M4 itself, thus wires are required to connect between the M4 and the doubler. Hot glue is used to keep the LED in place. This light of this LED is much easier to observe from the top than from the sides.
+
+<img src="assets/css/Mod_LED.jpg" width="470" height="540">
+<i>The green light means the WiFi is connected!</i>
+
+### Code
+The LED light was connected to port6 of the doubler, which was the last available port. While the wiring was more difficult, the code was far easier, as the value only needed to be set to true once, after the WiFi was connected. Outside of the startup, the LED is not set to false anywhere else in the program.
+
+```python
+# Configure WiFi LED
+# Sets to False when program restarts
+WIFI_LED = DigitalInOut(board.D6)
+WIFI_LED.direction = Direction.OUTPUT
+WIFI_LED.value = False
+```
+### LED Hole
+This modification required a change of design in the lid of the enclosure, so it could stick outside of the enclosure. A 5.1 millimeter hole was put in the lid for the LED. For replication purposes, the LED shouldn't be firmly secured into the device until the LED is fitted in the lid.
+
+<img src="assets/css/Mod_LEDLID.png" width="400" height="300">
+<i>A very easy adjustment to the lid.</i>
+
+## Final Assembly
+The final assembly wasn't simply. The external small hole for the wire leading outside of the enclosure needed to be spliced. My device couldn't be glued into the ground until the position it was in was suitable for the LED lit to fit in the LED. Even after the LED fit, the wires connecting to the LED had to be firmly secured in place. The BME280 itself was loose and needed to be secured, including its wires (to prevent it from breaking out.)
+
+<!---
 ## Challenges
-Overall, the modifications took longer than the device itself. 
+Overall, the modifications took longer than the device itself. The biggest challenge was making as many modifications as I could with my available time and ports. During this time I also ordered more parts. The enclosure also limited the modifications in terms of size, since the smaller the enclosure the less bulky the device. During the modification stage, I used multiple tools that I didn't use when assembling the Adafruit doubler, such as the heat gun and the heat shrink.
+
+Another challenge was keeping the interior of the enclosure as accurate as possible to the outside conditions, most importantly in terms of temperature. If the enclosure was hotter than the outside temperature, then the recordings from the BME280 would be inaccurate. While the enclosure itself was a bright color to help reduce the effect of the sun, I wasn't sure if it was enough.
+
+Splicing the wires was a very time-consuming process, and errors meant I would have to cut down and resplice the wires again.
 
 ## Video
 

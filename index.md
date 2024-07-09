@@ -275,7 +275,9 @@ Overall, the modifications took longer than the device itself. The biggest chall
 
 Another challenge was keeping the interior of the enclosure as accurate as possible to the outside conditions, most importantly in terms of temperature. If the enclosure was hotter than the outside temperature, then the recordings from the BME280 would be inaccurate. While the enclosure itself was a bright color to help reduce the effect of the sun, I wasn't sure if it was enough.
 
-Splicing the wires was a very time-consuming process, and errors meant I would have to cut down and resplice the wires again. Keeping the LED in place was also difficult. 
+Splicing the wires was a very time-consuming process, and errors meant I would have to cut down and resplice the wires again. Keeping the LED in place was also difficult.
+
+During the last few days, most of my effort was spent fixing my project, as the components that were used to build the device weeks before had broken down, including the PM2.5 sensor and the wires. 
 
 ## Video
 

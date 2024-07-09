@@ -264,13 +264,18 @@ This modification required a change of design in the lid of the enclosure, so it
 ## Final Assembly
 The final assembly wasn't simply. The external small hole for the wire leading outside of the enclosure needed to be spliced. My device couldn't be glued into the ground until the position it was in was suitable for the LED lit to fit in the LED. Even after the LED fit, the wires connecting to the LED had to be firmly secured in place. The BME280 itself was loose and needed to be secured, including its wires (to prevent it from breaking out.)
 
+I modified the CAD to hold more space for the power bank, since while the power bank originally fit, having both ports plugged into the power bank was too wide for the project. Instead, I made the power bank fit diagonally.
+
+<img src="assets/css/Mod_Base2.png" width="640" height="450">
+<i>The dimensions of the walls didn't change, only the interior walls changed.</i>
+
 <!---
 ## Challenges
 Overall, the modifications took longer than the device itself. The biggest challenge was making as many modifications as I could with my available time and ports. During this time I also ordered more parts. The enclosure also limited the modifications in terms of size, since the smaller the enclosure the less bulky the device. During the modification stage, I used multiple tools that I didn't use when assembling the Adafruit doubler, such as the heat gun and the heat shrink.
 
 Another challenge was keeping the interior of the enclosure as accurate as possible to the outside conditions, most importantly in terms of temperature. If the enclosure was hotter than the outside temperature, then the recordings from the BME280 would be inaccurate. While the enclosure itself was a bright color to help reduce the effect of the sun, I wasn't sure if it was enough.
 
-Splicing the wires was a very time-consuming process, and errors meant I would have to cut down and resplice the wires again.
+Splicing the wires was a very time-consuming process, and errors meant I would have to cut down and resplice the wires again. Keeping the LED in place was also difficult. 
 
 ## Video
 

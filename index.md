@@ -280,7 +280,19 @@ Splicing the wires was a very time-consuming process, and errors meant I would h
 ## Video
 
 ## Greatest Challenges & Triumphs
-## Key Topics Learned
+
+During Bluestamp, I also learned a couple key topics, such as:
+*How to solder wires
+*How to use Arduino & Adafruit Doubler
+*How to make connections outside the breadboard
+*How to create basic circuits, including LEDs and servos
+*How to splice wires
+*How to use CircuitPython
+*How to use CAD
+*How to use the PM2.5 and BME280 sensors
+
+The more modificiations I add, the more I learn in Bluestamp Engineering. 
+
 ## Future Plans after Bluestamp Engineering
 What I want to learn in the future after Bluestamp Engineering is```````````````````````````````````````````````````````````````````````````````````    
 -->

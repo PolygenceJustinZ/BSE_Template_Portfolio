@@ -266,10 +266,10 @@ The final assembly wasn't simply. The external small hole for the wire leading o
 
 I modified the CAD to hold more space for the power bank, since while the power bank originally fit, having both ports plugged into the power bank was too wide for the project. Instead, I made the power bank fit diagonally.
 
-<img src="assets/css/Mod_Base2.png" width="640" height="450">
+<img src="assets/css/Mod_Base3.png" width="640" height="450">
 <i>The dimensions of the walls didn't change, only the interior walls changed.</i>
-
-<img src="assets/css/Mod_Assembly.jpg" width="640" height="450">
+<br></br>
+<img src="assets/css/Mod_Assembly.jpg" width="480" height="640">
 <i>The top view of my enclosure before assembly. The brightly colored enclosure helps against the sun on hot days.</i>
 
 ## Challenges
@@ -688,7 +688,7 @@ This is a demonstration video of my starter Arduino project.
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
 
 # Code
-Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
+Here is the code for the final IoT Air Quality Sensor, including the modifications. This code won't work without the installed files and hardware setup, found in milestones 1 & 2.
 
 ```python
 # imports

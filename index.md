@@ -269,7 +269,7 @@ I modified the CAD to hold more space for the power bank, since while the power 
 <img src="assets/css/Mod_Base2.png" width="640" height="450">
 <i>The dimensions of the walls didn't change, only the interior walls changed.</i>
 
-<!---
+
 ## Challenges
 Overall, the modifications took longer than the device itself. The biggest challenge was making as many modifications as I could with my available time and ports. During this time I also ordered more parts. The enclosure also limited the modifications in terms of size, since the smaller the enclosure the less bulky the device. During the modification stage, I used multiple tools that I didn't use when assembling the Adafruit doubler, such as the heat gun and the heat shrink.
 
@@ -277,24 +277,30 @@ Another challenge was keeping the interior of the enclosure as accurate as possi
 
 Splicing the wires was a very time-consuming process, and errors meant I would have to cut down and resplice the wires again. Keeping the LED in place was also difficult.
 
-During the last few days, most of my effort was spent fixing my project, as the components that were used to build the device weeks before had broken down, including the PM2.5 sensor and the wires. 
+<img src="assets/css/Mod_Splice.jpg" width="350" height="450">
+<i>A poorly spliced wire. It stopped working one day after it was spliced.</i>
+<br></br>
+During the last few days, most of my effort was spent fixing my project, as the components that were used to build the device weeks before had broken down, specifically the silicon wires. The enclosure itself tended to heat up due to the battery as well. It seems that the faulty guide had issues not just inside the software.
 
 ## Video
 
-## Greatest Challenges & Triumphs
+## Triumphs
+Bluestamp was a unique learning experience, as in I learned the most through my failures and issues with my project. I tried to ensure that any problems with my project would be resolved within a day. My greatest triumphs were not in the software, but the hardware. Knowing how to not just create devices and sensor chips, but also knowing how to keep them well protected, was a satisfying challenge to overcome. I even got to use the 3D printer, which was something I wasn't able to bring myself to learn in previous years. 
 
 During Bluestamp, I also learned a couple key topics, such as:
-*How to solder wires
-*How to use Arduino & Adafruit Doubler
-*How to make connections outside the breadboard
-*How to create basic circuits, including LEDs and servos
-*How to splice wires
-*How to use CircuitPython
-*How to use CAD
-*How to use the PM2.5 and BME280 sensors
+<ul>
+<li>*How to solder wires</li>
+<li>How to use Arduino & Adafruit Doubler</li>
+<li>How to make connections outside the breadboard</li>
+<li>How to create basic circuits, including LEDs and servos</li>
+<li>How to splice wires</li>
+<li>How to use CircuitPython</li>
+<li>How to use CAD</li>
+<li>How to use the PM2.5 and BME280 sensors</li>
+</ul>
 
-The more modificiations I add, the more I learn in Bluestamp Engineering. 
-
+The more modificiations I added to my project, the more I learned in Bluestamp Engineering. 
+<!---
 ## Future Plans after Bluestamp Engineering
 What I want to learn in the future after Bluestamp Engineering is```````````````````````````````````````````````````````````````````````````````````    
 -->

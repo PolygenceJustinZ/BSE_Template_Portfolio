@@ -269,6 +269,8 @@ I modified the CAD to hold more space for the power bank, since while the power 
 <img src="assets/css/Mod_Base2.png" width="640" height="450">
 <i>The dimensions of the walls didn't change, only the interior walls changed.</i>
 
+<img src="assets/css/Mod_Assembly.jpg" width="640" height="450">
+<i>The top view of my enclosure before assembly. The brightly colored enclosure helps against the sun on hot days.</i>
 
 ## Challenges
 Overall, the modifications took longer than the device itself. The biggest challenge was making as many modifications as I could with my available time and ports. During this time I also ordered more parts. The enclosure also limited the modifications in terms of size, since the smaller the enclosure the less bulky the device. During the modification stage, I used multiple tools that I didn't use when assembling the Adafruit doubler, such as the heat gun and the heat shrink.

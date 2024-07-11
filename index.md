@@ -1,41 +1,22 @@
 # IoT Air Pollution Monitor
-<!---
-Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!
 
-The IoT Air Pollution Monitor monitors the air quality, and sends the data out to the internet as an open source sensor. It is controlled via CircuitPython to allow it to function...
-It is meant for indoor home usage.
-
-You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
--->
-
+The IoT (Internet of Things) Air Pollution Monitor records AQ (air quality) data from the PM2.5 sensor, as well as humidity & temperature from the BME280 sensor, then uploads them to Adafruit IO. The uploaded data is then displayed on the webpage, updating as often as the device uploads to Adafruit. It also comes fitted with a WiFi LED to show the status, as well as a piezo buzzer when the air quality becomes too hazardous.
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
 | Justin Z | Evergreen Valley High School | Electrical Engineering | Rising Senior
 
-<!--
-The image of myself and my completed project will come in the future. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
-
-For your final milestone, explain the outcome of your project. Key details to include are:
-- What you've accomplished since your previous milestone
-- What your biggest challenges and triumphs were at BSE
-- A summary of key topics you learned about
-- What you hope to learn in the future after everything you've learned at BSE
-
-MODIFICATION: I WAS UNHAPPY WITH THE WAY MAP_RANGE WORKED, AND AVERAGING THE AQ WOULD BE FLOORED, SO I CHANGED CODE TO MEASURE MULTIPLE AQ AND CALCULATE AQI, THEN ROUND THEM ALL. CALCULATE AQI NOT USED IN WHILE TRUE, INSTEAD USED IN CALCULATE_ALL_SAMPLES FUNCTION. REDESIGNED ENTIRE CODE TO BE EASIER TO READ
-MODIFICATION: I ADDED IS_LOGGING BOOLEAN
-
--->
-
 <img src="assets/css/Justin_Z.JPG" width="450" height="600">
 
 # Main Project Description
+
 My main project, an IoT Air Pollution Monitor, gauges the air quality index, humidity, and temperature, and is controlled by an external device via CircuitPython. Thus, to effectively complete the project, it is necessary to understand CircuitPython as well as the air quality monitor itself.
 
 Since the project is an IoT (Internet of Things) device, it requires an internet connection, as well as an AC outlet. The air pollution monitor utilizes an open source sensor, as sending data to a company's web service only works until that certain company goes out of business. That is the reason to use Adafruit IO, a website that allows me to create my own system that takes data from feeds. My IoT Air Pollution Monitor will upload data to the feeds, which will be displayed via the interface on the website.
 
 
 # Modifications
+
 Throughout the project, I made multiple modifications in an attempt to make the Air Pollution Monitor more unique and usable. Without them, the air pollution monitor would simply be a bare-bones design. The more modifications meant the better the project, so I spent a while brainstorming potential modifications.
 
 ## Enclosure Modification
@@ -271,6 +252,11 @@ I modified the CAD to hold more space for the power bank, since while the power 
 <br></br>
 <img src="assets/css/Mod_Assembly.jpg" width="480" height="640">
 <i>The top view of my enclosure before assembly. The brightly colored enclosure helps against the sun on hot days.</i>
+<br></br>
+The final step was to glue it using super glue to prevent the components from tumbling when the device is mounted on a vertical surface. Super glue leaves behind residue upon drying, so be careful with the amount used!
+
+<img src="assets/css/Mod_Final.jpg" width="600" height="480">
+<i>This is the completed project.</i>
 
 ## Challenges
 Overall, the modifications took longer than the device itself. The biggest challenge was making as many modifications as I could with my available time and ports. During this time I also ordered more parts. The enclosure also limited the modifications in terms of size, since the smaller the enclosure the less bulky the device. During the modification stage, I used multiple tools that I didn't use when assembling the Adafruit doubler, such as the heat gun and the heat shrink.
@@ -302,10 +288,9 @@ During Bluestamp, I also learned a couple key topics, such as:
 </ul>
 
 The more modificiations I added to my project, the more I learned in Bluestamp Engineering. 
-<!---
-## Future Plans after Bluestamp Engineering
-What I want to learn in the future after Bluestamp Engineering is```````````````````````````````````````````````````````````````````````````````````    
--->
+<br></br>
+## Future Plans
+Bluestamp Engineering has given me the necessary foundation to pursue a career in electrical engineering. While I hope to learn more after Bluestamp, such as control theory and more, I'd like to work on environmental sensors as well, such as tornado or ocean probes. These projects focus on how to let the device measure conditions without being directly damaged. Regardless, my air pollution monitor will continue to stay in my backyard, at least until the PM2.5 sensor breaks down from age.
 
 # Third Milestone
 For the third milestone, the code that makes the device fully work will be written. Once the code is written and saved to the device, connecting it to a power source and pressing the restart button should let the code continue to work, as long as a power source is connected. 
@@ -683,12 +668,9 @@ This is a demonstration video of my starter Arduino project.
 <iframe width="560" height="315" src="https://www.youtube.com/embed/h87ni0UHs0o?si=HWhMT00cOCrQPvNf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 
-<!---
-# Schematics 
-Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
+# Final Code
 
-# Code
-Here is the code for the final IoT Air Quality Sensor, including the modifications. This code won't work without the installed files and hardware setup, found in milestones 1 & 2.
+Here is the code for the final IoT Air Quality Sensor, including the modifications. This code won't work without the installed files and hardware setup, including the secrets file, found in milestones 1 & 2.
 
 ```python
 # imports
@@ -1014,7 +996,7 @@ while True:
     time.sleep(45)
 
 ```
--->
+
 # Bill of Materials
 I used various components in the creation of my IoT Air Pollution Monitor. However, some materials weren't necessary, as replacing the silicon wire with normal wires could also work, and I improvised for an enclosure by 3D printing my own instead of purchasing one.
 
@@ -1029,15 +1011,7 @@ I used various components in the creation of my IoT Air Pollution Monitor. Howev
 | 5V 2A Switching Power Supply | Lets the board connect to power | $7.95 | <a href="https://www.adafruit.com/product/1994"> Link </a> |
 | USB A/Micro Cable | Lets the board connect to power | $4.95 | <a href="https://www.adafruit.com/product/2185"> Link </a> |
 | QEEUBOVY Quick Charge Power Bank | Acts as the power supply for the device | $13.99 | <a href="https://www.amazon.com/Smallest-Portable-Charging-Competible-Essentials/dp/B0CKNGTDLY/ref=sr_1_16?dib=eyJ2IjoiMSJ9.gxLOXRI_yCUIppyNCwHl6TeBp7PotJ4Y4SjMzGX28EWL_auQkIKWaLGyQvmSUYXcPbkU_giFiG6Dx6xN61tGe28MX6nacov8xSrZVWwTlGAiVW8kmTr6NMOo6DV3kyD_fwulONu5uAwzXuDvCo1GNsi9IwmKSKbFKELhhPJ7EM_dib1yYK-zcXePhyI05JX9u1SdyNYHdUi7kPCRr_rBOTWu-4x54-TvDhoMNm2jOvs.PhOv9jl69UNjX3b_ijdELLd4V4SfUYgQunw33g5935o&dib_tag=se&hvadid=664624701487&hvdev=c&hvlocphy=9061320&hvnetw=g&hvqmt=b&hvrand=3106670759621317154&hvtargid=kwd-297941941862&hydadcr=22005_13484882&keywords=smallest+most+powerful+power+bank&qid=1719530920&sr=8-16"> Link </a> |
-
-<!---
-# Other Resources/Examples
-One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
-- [Example 1](https://trashytuber.github.io/YimingJiaBlueStamp/)
-- [Example 2](https://sviatil0.github.io/Sviatoslav_BSE/)
-- [Example 3](https://arneshkumar.github.io/arneshbluestamp/)
+| My onShape Enclosure Body Design | Feel free to use the CAD design! | N/A | <a href="https://cad.onshape.com/documents/4c7d1700785509b65d1cce7f/w/9fdd26b679d5dd9a4aba1327/e/a7ddef6cac27536e19806b98?renderMode=0&uiState=669043f805629e529f226994"> Link </a> |
+| My onShape Enclosure Lid Design | Feel free to use the CAD design! | N/A | <a href="https://cad.onshape.com/documents/221830d868bfccc7a193d593/w/e68ddbafa327d629cc13ec26/e/c5737b01e29ba991a76d574b?renderMode=0&uiState=669044d4981d710489ba79ab"> Link </a> |
 
 
-
-To watch the BSE tutorial on how to create a portfolio, click here.
--->

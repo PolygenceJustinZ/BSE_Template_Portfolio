@@ -612,13 +612,13 @@ WIFI_LED.direction = Direction.OUTPUT
 WIFI_LED.value = False
 ```
 ### LED Hole
-This modification required a change of design in the lid of the enclosure, so it could stick outside of the enclosure. A 5.1 millimeter hole was put in the lid for the LED. For replication purposes, the LED shouldn't be firmly secured into the device until the LED is fitted in the lid.
+This modification required a change of design in the lid of the enclosure, so it could stick outside of the enclosure. A 5.1 millimeter hole was put in the lid for the LED. For replication purposes, the LED shouldn't be firmly secured into the device until the LED is fitted in the lid. Additionally, another hole, for the BME280, was added to the lid.
 
-<img src="assets/css/Mod_LEDLID.png" width="400" height="300">
+<img src="assets/css/Mod_LEDLID2.png" width="400" height="300">
 <i>A very easy adjustment to the lid.</i>
 
 ## Final Assembly
-The final assembly wasn't simply. The external small hole for the wire leading outside of the enclosure needed to be spliced. My device couldn't be glued into the ground until the position it was in was suitable for the LED lit to fit in the LED. Even after the LED fit, the wires connecting to the LED had to be firmly secured in place. The BME280 itself was loose and needed to be secured, including its wires (to prevent it from breaking out.)
+The final assembly wasn't simple. The external small hole for the wire leading outside of the enclosure needed to be spliced. My device couldn't be glued into the ground until the position it was in was suitable for the LED lit to fit in the LED. Even after the LED fit, the wires connecting to the LED had to be firmly secured in place. The BME280 itself was loose and needed to be secured, including its wires (to prevent it from breaking out.)
 
 I modified the CAD to hold more space for the power bank, since while the power bank originally fit, having both ports plugged into the power bank was too wide for the project. Instead, I made the power bank fit diagonally.
 
@@ -626,7 +626,7 @@ I modified the CAD to hold more space for the power bank, since while the power 
 <i>The dimensions of the walls didn't change, only the interior walls changed.</i>
 <br></br>
 <img src="assets/css/Mod_Assembly.jpg" width="480" height="640">
-<i>The top view of my enclosure before assembly. The brightly colored enclosure helps against the sun on hot days.</i>
+<i>The top view of my enclosure before assembly. The brightly colored enclosure helps against the sun on hot days. The lid is outdated as it is missing the BME280 hole.</i>
 <br></br>
 The final step was to glue it using super glue to prevent the components from tumbling when the device is mounted on a vertical surface. Super glue leaves behind residue upon drying, so be careful with the amount used!
 

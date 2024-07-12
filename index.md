@@ -93,7 +93,8 @@ For my first milestone, I worked on the physical setup of the project. The BME28
 
 Here is the setup for my connections to the Adafruit doubler. These connections are essential for the next steps. For example, the ground ports on both of the components are connected to a single rail on the doubler, meaning that rail will serve as the ground rail.
 
-<img src="assets/css/MS1_Doubler1.jpg" width="800" height="600">
+<img src="assets/css/MS1_Doubler1.jpg" width="800" height="600"><br />
+<br />
 *It is better to use colored wired for replication purposes. The red & black wire is the connection between the PMS5003 and the PM2.5 Sensor.*
 
 
@@ -135,7 +136,8 @@ When you create an Adafruit IO account, you are given an Adafruit Username and I
 
 My dashboard ended up in this layout. I added the map, but during the creation of the project it wasn't exactly necessary, but still not a bad feature.
 
-<img src="assets/css/MS1_Dashboard.png" width="700" height="600">
+<img src="assets/css/MS1_Dashboard.png" width="700" height="600"> <br />
+<br />
 <i>With the dashboard completed, all I needed was code that took data from the sensors and uploaded it to the feeds.</i>
 
 ## CircuitPython & Code Setup
@@ -402,24 +404,25 @@ Before I worked on my CAD Design, I drafted how my project would look like at fi
 
 I made two sketches, with my first one getting the measurements of all the components I would use, including screw holes, the device, and the USB length. During this phase, I didn't know what my exact power bank size would be, so I used a variable to represent it. The purpose of the first blueprint was only to remind me of the important dimensions more than the actual CAD design.
 
-<img src="assets/css/Blueprint1.jpg" width="450" height="525">
-<i>Remember that these blueprints are an early design, and that not everything, including the dimensions, were going to be concrete.</i>
-<br></br>
+<img src="assets/css/Blueprint1.jpg" width="450" height="525"> <br /><br />
+<i>Remember that these blueprints are an early design, and that not everything, including the dimensions, were going to be concrete.</i><br />
+<br />
 My second sketch was a top-down view of the project. This would make my CAD design far easier when following the sketch. The only portions this sketch didn't include was the holes. The purpose of the second sketch was for easy replication, not concrete replication, since certain measurements in the enclosure draft was inaccurate. 
 
-<img src="assets/css/Blueprint2.jpg" width = "450" height="525">
+<img src="assets/css/Blueprint2.jpg" width = "450" height="525"><br />
+<br />
 <i>Using both inches and millimeters in a design is very risky and confusing, thus I would recommend to just use millimeters.</i>
 
 ### CAD
 Utilizing onShape, since it was a free CAD without the need of downloading it, the design could be easily created. The CAD organizes the various components in a top-down list, with the objects at the top happening first. While that sounds simple, it means that the order heavily matters. For example, extrusions can't be organized above the sketch if the extrusion is based on the sketch. Additionally, subtraction booleans, which take two parts and subtract them, have to be ordered below all the extrusions and sketches involved.
 
-First, I started with the base panel. Since I was new to onShape, I learned as I created the design. The sketch used center-point circles of differing diameters, and the holes used booleans. <br></br>
+First, I started with the base panel. Since I was new to onShape, I learned as I created the design. The sketch used center-point circles of differing diameters, and the holes used booleans. <br /><br />
 <img src="assets/css/Mod_BasePanel.png" width="450" height="315">
 
-Adding the main body of the design to the panel, tools such as dimensioning and making lines tangent were used.<br></br>
+Adding the main body of the design to the panel, tools such as dimensioning and making lines tangent were used.<br /><br />
 <img src="assets/css/Mod_Base1.png" width="450" height="315">
 
-Finally, a lid was added in a separate file. It is important to put non-connected portions in separate files for printing.<br></br>
+Finally, a lid was added in a separate file. It is important to put non-connected portions in separate files for printing.<br /><br />
 <img src="assets/css/Mod_Lid.png" width="450" height="315">
 
 The CAD designs can be modified in the future in the event of implementing new design-altering modifications.
@@ -576,7 +579,7 @@ While the exceptions were created in the calculate_aqi and calculate_cat functio
 ### Wiring
 As the piezo buzzer doesn't require a resistor, the wiring was relatively simple (though wiring with a resistor isn't very difficult either.) The most important part of the piezo is connecting it to an available port, and there were only 2 available ports remaining in the Featherwing Doubler (the esp32 alone requires 4 ports!)
 
-<img src="assets/css/Mod_Piezo.jpg" width="450" height="520">
+<img src="assets/css/Mod_Piezo.jpg" width="450" height="520"> <br /><br />
 Other than the port, the piezo buzzer is connected to the ground rail. A soldered link was created underneath the board since not every hole was connected in the doubler. This link was between the wire and the Piezo buzzer. 
 
 While this was the first physical modification (other than the enclosure), this modification did not require the enclosure to change its design.
@@ -598,7 +601,7 @@ While the Arduino Feather M4 lights up to show it is plugged in, it also doesn't
 ### Wiring
 The wiring of the LED is similar to the Piezo buzzer, except that it uses a resistor. The position of the resistor doesn't matter if it comes between the power to the LED or between the LED and the ground rail. Additionally, the LED is placed on the Feather M4 itself, thus wires are required to connect between the M4 and the doubler. Hot glue is used to keep the LED in place. This light of this LED is much easier to observe from the top than from the sides.
 
-<img src="assets/css/Mod_LED.jpg" width="470" height="540">
+<img src="assets/css/Mod_LED.jpg" width="470" height="540"><br /><br />
 <i>The green light means the WiFi is connected!</i>
 
 ### Code
@@ -614,7 +617,7 @@ WIFI_LED.value = False
 ### LED Hole
 This modification required a change of design in the lid of the enclosure, so it could stick outside of the enclosure. A 5.1 millimeter hole was put in the lid for the LED. For replication purposes, the LED shouldn't be firmly secured into the device until the LED is fitted in the lid. Additionally, another hole, for the BME280, was added to the lid.
 
-<img src="assets/css/Mod_LEDLID2.png" width="400" height="300">
+<img src="assets/css/Mod_LEDLID2.png" width="400" height="300"><br /><br />
 <i>A very easy adjustment to the lid.</i>
 
 ## Final Assembly
@@ -622,15 +625,15 @@ The final assembly wasn't simple. The external small hole for the wire leading o
 
 I modified the CAD to hold more space for the power bank, since while the power bank originally fit, having both ports plugged into the power bank was too wide for the project. Instead, I made the power bank fit diagonally.
 
-<img src="assets/css/Mod_Base3.png" width="640" height="450">
+<img src="assets/css/Mod_Base3.png" width="640" height="450"><br/><br/>
 <i>The dimensions of the walls didn't change, only the interior walls changed.</i>
-<br></br>
-<img src="assets/css/Mod_Assembly.jpg" width="480" height="640">
+<br/><br/>
+<img src="assets/css/Mod_Assembly.jpg" width="480" height="640"><br/><br/>
 <i>The top view of my enclosure before assembly. The brightly colored enclosure helps against the sun on hot days. The lid is outdated as it is missing the BME280 hole.</i>
-<br></br>
+<br/><br/>
 The final step was to glue it using super glue to prevent the components from tumbling when the device is mounted on a vertical surface. Super glue leaves behind residue upon drying, so be careful with the amount used!
 
-<img src="assets/css/Mod_Final2.jpg" width="600" height="480">
+<img src="assets/css/Mod_Final2.jpg" width="600" height="480"><br/><br/>
 <i>This is the completed project.</i>
 
 ## Challenges
@@ -640,9 +643,9 @@ Another challenge was keeping the interior of the enclosure as accurate as possi
 
 Splicing the wires was a very time-consuming process, and errors meant I would have to cut down and resplice the wires again. Keeping the LED in place was also difficult.
 
-<img src="assets/css/Mod_Splice.jpg" width="350" height="450">
+<img src="assets/css/Mod_Splice.jpg" width="350" height="450"><br/><br/>
 <i>A poorly spliced wire. It stopped working one day after it was spliced.</i>
-<br></br>
+<br/><br/>
 During the last few days, most of my effort was spent fixing my project, as the components that were used to build the device weeks before had broken down, specifically the silicon wires. The enclosure itself tended to heat up due to the battery as well. It seems that the faulty guide had issues not just inside the software.
 
 ## Video
@@ -665,7 +668,7 @@ During Bluestamp, I also learned a couple key topics, such as:
 </ul>
 
 The more modificiations I added to my project, the more I learned in Bluestamp Engineering. 
-<br></br>
+<br/><br/>
 ## Future Plans
 Bluestamp Engineering has given me the necessary foundation to pursue a career in electrical engineering. While I hope to learn more after Bluestamp, such as control theory and more, I'd like to work on environmental sensors as well, such as tornado or ocean probes. These projects focus on how to let the device measure conditions without being directly damaged. Regardless, my air pollution monitor will continue to stay in my backyard, at least until the PM2.5 sensor breaks down from age.
 

@@ -568,7 +568,7 @@ An example of logging is shown in this snippet:
         supervisor.reload()
 ```
 
-Additionally commentary and more descriptive print errors were a modification in my code, and while they seem miniscule, they are EXTREMELY helpful in understanding and replicating the code!
+Additional commentary and more descriptive print errors were a modification in my code, and while they seem miniscule, they are EXTREMELY helpful in understanding and replicating the code!
 
 ## Piezo Buzzer
 While the exceptions were created in the calculate_aqi and calculate_cat functions to handle extremely high AQ values (since the original code would result in an error,) beyond-hazardous AQI values are more deadly to people than it is to the device. Thus, a piezo buzzer was implemented as a miniature alarm, similar to a smoke detector.

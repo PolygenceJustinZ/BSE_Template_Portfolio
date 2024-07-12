@@ -647,6 +647,8 @@ During the last few days, most of my effort was spent fixing my project, as the 
 
 ## Video
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pMiHJxSAGVM" title="Justin Z. Modded Milestone" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Triumphs
 Bluestamp was a unique learning experience, as in I learned the most through my failures and issues with my project. I tried to ensure that any problems with my project would be resolved within a day. My greatest triumphs were not in the software, but the hardware. Knowing how to not just create devices and sensor chips, but also knowing how to keep them well protected, was a satisfying challenge to overcome. I even got to use the 3D printer, which was something I wasn't able to bring myself to learn in previous years. 
 

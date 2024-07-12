@@ -136,7 +136,7 @@ When you create an Adafruit IO account, you are given an Adafruit Username and I
 My dashboard ended up in this layout. I added the map, but during the creation of the project it wasn't exactly necessary, but still not a bad feature.
 
 <img src="assets/css/MS1_Dashboard.png" width="700" height="600">
-*With the dashboard completed, all I needed was code that took data from the sensors and uploaded it to the feeds.*
+<i>With the dashboard completed, all I needed was code that took data from the sensors and uploaded it to the feeds.</i>
 
 ## CircuitPython & Code Setup
 While CircuitPython is a key element for many electronic devices, CircuitPython comes in different forms, and I needed to find the version which was suitable for my Feather M4 Express (the chip that actually handles the program of my device.) After selecting the Feather M4 Express, I downloaded the latest stable uf2 file, which was version 9.0.5.

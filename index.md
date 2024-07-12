@@ -630,7 +630,7 @@ I modified the CAD to hold more space for the power bank, since while the power 
 <br></br>
 The final step was to glue it using super glue to prevent the components from tumbling when the device is mounted on a vertical surface. Super glue leaves behind residue upon drying, so be careful with the amount used!
 
-<img src="assets/css/Mod_Final.jpg" width="600" height="480">
+<img src="assets/css/Mod_Final2.jpg" width="600" height="480">
 <i>This is the completed project.</i>
 
 ## Challenges

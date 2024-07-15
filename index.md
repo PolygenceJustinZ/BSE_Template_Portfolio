@@ -657,7 +657,7 @@ Bluestamp was a unique learning experience, as in I learned the most through my 
 
 During Bluestamp, I also learned a couple key topics, such as:
 <ul>
-<li>*How to solder wires</li>
+<li>How to solder wires</li>
 <li>How to use Arduino & Adafruit Doubler</li>
 <li>How to make connections outside the breadboard</li>
 <li>How to create basic circuits, including LEDs and servos</li>
